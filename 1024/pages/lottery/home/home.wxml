@@ -1,2 +1,31 @@
-<!--pages/lottery/home/home.wxml-->
-<text>pages/lottery/home/home.wxml</text>
+<cu-custom bgColor="bg-gradual-blue">
+  <view slot="content">首页答题</view>
+</cu-custom>
+
+<scroll-view scroll-y class="scrollPage">
+  <view class='nav-list margin-top-xl'>
+    <view hover-class='none' class="nav-li bg-{{item.color}}" wx:for="{{elements}}" wx:key bindtap="showModal" id="{{ index }}">
+      <view class="nav-title">{{item.title}}</view>
+      <view class="nav-name">{{item.name}}</view>
+    </view>
+  </view>
+  <view class='cu-tabbar-height'></view>
+</scroll-view>
+
+<view class="cu-modal {{ modal==true?'show':'' }}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">闯关答题</view>
+      <view class="action" bindtap="cancelModal">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="padding-xl">
+      <text class="text-{{ elements[index].color }}">{{ elements[index].name }} - {{ elements[index].title }}</text>
+    </view>
+    <view class="cu-bar bg-white">
+      <view class="action margin-0 flex-sub  solid-left" bindtap="cancelModal">取消</view>
+      <view class="action margin-0 flex-sub text-green solid-left" bindtap="confirmModal">确定</view>
+    </view>
+  </view>
+</view>
