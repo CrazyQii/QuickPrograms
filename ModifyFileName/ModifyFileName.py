@@ -31,7 +31,7 @@ def RenameBatchImages():
         
         for fName in fileList:
             # 判断文件格式是否为图片
-            if fName.endswith(".jpg") is not True and fName.endswith(".png") is not True and fName.endswith(".tiff") is not True and fName.endswith(".webp") is not True:
+            if fName.endswith(".jpg") is not True and fName.endswith(".png") is not True and fName.endswith(".tiff") is not True and fName.endswith(".webp") is not True and fName.endswith(".jfif") is not True:
                 continue
             
             # 设置旧文件名称
