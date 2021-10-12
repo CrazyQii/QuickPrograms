@@ -1,9 +1,10 @@
 {
   "pages": [
+    "pages/lottery/answer/answer",
+    "pages/login/login",
     "pages/index/index",
     "pages/about/home/home",
-    "pages/lottery/home/home",
-    "pages/lottery/answer/answer"
+    "pages/lottery/home/home"
   ],
   "window": {
     "backgroundTextStyle": "light",

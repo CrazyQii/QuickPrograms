@@ -39,7 +39,7 @@
     "showES6CompileOption": false
   },
   "compileType": "miniprogram",
-  "libVersion": "2.4.2",
+  "libVersion": "2.19.6",
   "appid": "wx84979d11423fc905",
   "projectname": "lottery",
   "debugOptions": {

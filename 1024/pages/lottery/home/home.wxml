@@ -2,6 +2,7 @@
   <view slot="content">首页答题</view>
 </cu-custom>
 
+<!-- 主页面 -->
 <scroll-view scroll-y class="scrollPage">
   <view class='nav-list margin-top-xl'>
     <view hover-class='none' class="nav-li bg-{{item.color}}" wx:for="{{elements}}" wx:key bindtap="showModal" id="{{ index }}">
@@ -12,6 +13,7 @@
   <view class='cu-tabbar-height'></view>
 </scroll-view>
 
+<!-- 模态框 -->
 <view class="cu-modal {{ modal==true?'show':'' }}">
   <view class="cu-dialog">
     <view class="cu-bar bg-white justify-end">
@@ -20,7 +22,7 @@
         <text class="cuIcon-close text-red"></text>
       </view>
     </view>
-    <view class="padding-xl">
+    <view class="padding-xl bg-white">
       <text class="text-{{ elements[index].color }}">{{ elements[index].name }} - {{ elements[index].title }}</text>
     </view>
     <view class="cu-bar bg-white">

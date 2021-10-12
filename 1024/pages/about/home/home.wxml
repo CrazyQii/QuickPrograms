@@ -1,5 +1,5 @@
 <cu-custom bgColor="bg-gradual-blue">
-  <view slot="content">ColorUI 空白模板</view>
+  <view slot="content">个人等级</view>
 </cu-custom>
 <view class="margin-xl padding-xl bg-white radius shadow shadow-lg">
   <view class="flex justify-center">

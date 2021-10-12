@@ -5,62 +5,109 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    currentQuesIndex: 1, // 当前第几题
+    questions: [
+      {
+        'id': 1,
+        'content': '题目1',
+        'opta': '选项a',
+        'optb': '选项b',
+        'optc': '选项c',
+        'optd': '选项d',
+        'yes':  3
+      },
+      {
+        'id': 2,
+        'content': '题目2',
+        'opta': '选项a',
+        'optb': '选项b',
+        'optc': '选项c',
+        'optd': '选项d',
+        'yes':  3
+      },
+      {
+        'id': 3,
+        'content': '题目3',
+        'opta': '选项a',
+        'optb': '选项b',
+        'optc': '选项c',
+        'optd': '选项d',
+        'yes':  3
+      },
+      {
+        'id': 4,
+        'content': '题目4',
+        'opta': '选项a',
+        'optb': '选项b',
+        'optc': '选项c',
+        'optd': '选项d',
+        'yes':  3
+      },
+      {
+        'id': 5,
+        'content': '题目5',
+        'opta': '选项a',
+        'optb': '选项b',
+        'optc': '选项c',
+        'optd': '选项d',
+        'yes':  3
+      }
+    ],
+    answers: [],
+    btnShake: false,
+    btnContent: '下一题'
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad(options) {
+    console.log(options)
+  },
+
+  /**
+   * 查询题目列表
+   */
+  getQuestions() {
 
   },
 
   /**
-   * 生命周期函数--监听页面初次渲染完成
+   * 切换题目显示
+   * @param {*} currentQuesIndex 当前显示题目索引
    */
-  onReady: function () {
-
+  nextQues() {
+    // 校验当前题目是否选择单选框
+    if (this.data.answers.length != this.data.currentQuesIndex) { // 未选择
+      this.setData({
+        btnShake: true
+      })
+      return
+    } else if (this.data.currentQuesIndex == 5) { // 进入最后一道题
+      this.setData({
+        btnContent: '提交答案'
+      })
+    }
+    
+    else {
+      this.setData({
+        btnShake: false
+      })
+      this.setData({
+        currentQuesIndex: this.data.currentQuesIndex + 1
+      })
+    }
   },
-
+  
   /**
-   * 生命周期函数--监听页面显示
+   * 点击单选框，保存答案
+   * @param {*} e 
    */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
+  radioAnswer(e) {
+    let answers = this.data.answers
+    answers[this.data.currentQuesIndex - 1] = e.detail.value
+    this.setData({
+      answers: answers
+    })
   }
 })

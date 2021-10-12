@@ -1,2 +1,49 @@
-<!--pages/lottery/answer/answer.wxml-->
-<text>pages/lottery/answer/answer.wxml</text>
+<cu-custom bgColor="bg-gradual-blue">
+  <view slot="content">闯关答题</view>
+</cu-custom>
+
+<!-- 题目进度条 -->
+<view class="padding bg-white">
+  <view class="cu-progress round sm striped active">
+    <view class="bg-green" style="width: {{ currentQuesIndex / questions.length * 100 + '%'}}"></view>
+  </view>
+</view>
+
+<!-- 页面主体 -->
+<view class="padding text-center">
+  <block wx:for="{{ questions }}" wx:key>
+    <view wx:if="{{ index + 1 == currentQuesIndex}}">
+      <!-- 题目 -->
+      <view class="padding-xl radius shadow-warp bg-white margin-top" style="height: 12rem;">
+        <view>题目{{ index + 1}}</view>
+        <view class="margin-top">{{ item.content }}</view>
+      </view>
+      <!-- 单选框 -->
+      <radio-group class="block" bindchange="radioAnswer">
+        <view class="cu-form-group margin-top">
+          <view class="title">{{ item.opta }}</view>
+          <radio class="radio" value="1"></radio>
+        </view>
+        <view class="cu-form-group">
+          <view class="title">{{ item.optb }}</view>
+          <radio class="radio" value="2"></radio>
+        </view>
+        <view class="cu-form-group">
+          <view class="title">{{ item.optc }}</view>
+          <radio class="radio" value="3"></radio>
+        </view>
+        <view class="cu-form-group">
+          <view class="title">{{ item.optd }}</view>
+          <radio class="radio" value="4"></radio>
+        </view>
+      </radio-group>
+    </view>
+  </block>
+
+  <!-- 操作按钮 -->
+  <view class="padding flex flex-direction margin-top">
+    <button class="cu-btn bg-green lg shadow animation-{{ btnShake==true?'shake':'' }}" bindtap="nextQues">{{ btnContent }}</button>
+  </view>
+  
+</view>
+

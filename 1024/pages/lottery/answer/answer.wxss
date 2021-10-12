@@ -1,1 +1,2 @@
 /* pages/lottery/answer/answer.wxss */
+@import "../../../colorui/animation.wxss";
