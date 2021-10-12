@@ -2,9 +2,9 @@
 
 Page({
   data: {
-    userInfo: {}
+    scroll: 0
   },
-  onLoad: function () {
+  onLoad() {
     console.log(1234)
   }
 })

@@ -55,7 +55,8 @@ Page({
     ],
     answers: [],
     btnShake: false,
-    btnContent: '下一题'
+    btnContent: '下一题',
+    loadModal: false
   },
 
   /**
@@ -83,17 +84,25 @@ Page({
         btnShake: true
       })
       return
-    } else if (this.data.currentQuesIndex == 5) { // 进入最后一道题
-      this.setData({
-        btnContent: '提交答案'
+    } if (this.data.currentQuesIndex == 5) {
+      // 发送后端请求
+      console.log("用户完成答题，发送提交数据请求")
+      this.showLoadModal()
+      // 提交成功，跳转结果展示页面
+      wx.redirectTo({
+        url: '/pages/lottery/result/result',
+        success: res => {
+          this.hideLoadModal()
+        }
       })
-    }
-    
-    else {
+    } else {
+      if (this.data.currentQuesIndex + 1 == 5) { // 进入最后一道题
+        this.setData({
+          btnContent: '提交答案'
+        })
+      }
       this.setData({
-        btnShake: false
-      })
-      this.setData({
+        btnShake: false,
         currentQuesIndex: this.data.currentQuesIndex + 1
       })
     }
@@ -108,6 +117,18 @@ Page({
     answers[this.data.currentQuesIndex - 1] = e.detail.value
     this.setData({
       answers: answers
+    })
+  },
+
+  showLoadModal() {
+    this.setData({
+      loadModal: true
+    })
+  },
+
+  hideLoadModal() {
+    this.setData({
+      loadModal: false
     })
   }
 })
