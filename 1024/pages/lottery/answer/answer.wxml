@@ -11,7 +11,7 @@
 
 <!-- 页面主体 -->
 <view class="padding text-center">
-  <block wx:for="{{ questions }}" wx:key>
+  <block wx:for="{{ questions }}" wx:key="index">
     <view wx:if="{{ index + 1 == currentQuesIndex}}">
       <!-- 题目 -->
       <view class="padding-xl radius shadow-warp bg-white margin-top" style="height: 12rem;">
@@ -48,7 +48,4 @@
 </view>
 
 <!-- 加载弹框 -->
-<view class='cu-load load-modal' wx:if="{{loadModal}}">
-  <image src='/images/logo.png' class='png' mode='aspectFit'></image>
-  <view class='gray-text'>加载中...</view>
-</view>
+<cu-loading wx:if="{{loadModal}}"></cu-loading>

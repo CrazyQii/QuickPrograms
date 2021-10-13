@@ -1,8 +1,8 @@
 <!-- 主体页面 -->
-<view class="UCenter-bg">
-  <image src="{{ userInfo.avatarUrl }}" class="png round" mode="widthFix"></image>
-  <view class="text-xl margin-top">{{ userInfo.nickName }}</view>
-  <image src="/images/wave.gif" mode="scaleToFill" class="gif-wave"></image>
+<view class="UCenter-bg bg-brown">
+    <image src="{{ userInfo.avatarUrl }}" class="png round" mode="widthFix"></image>
+    <view class="text-xl margin-top">{{ userInfo.nickName }}</view>
+    <image src="/images/wave.gif" mode="scaleToFill" class="gif-wave"></image>
 </view>
 
 <view class="padding flex text-center text-grey bg-white shadow-warp">

@@ -42,7 +42,7 @@ App({
   },
   globalData: {
     userInfo: null,
-    awardsConfig: {},
-    runDegs: 0
+    host: 'http://150.223.204.125:4443/'
+    // host: 'http://150.223.204.125:4443/'
   }
 })

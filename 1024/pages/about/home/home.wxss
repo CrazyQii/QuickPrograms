@@ -1,7 +1,5 @@
 /* pages/about/home/home.wxss */
 .UCenter-bg {
-  background: url('/images/BasicsBg.png');
-  background-size: cover;
   height: 550rpx;
   display: flex;
   justify-content: center;

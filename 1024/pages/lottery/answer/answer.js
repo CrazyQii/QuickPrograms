@@ -1,4 +1,7 @@
 // pages/lottery/answer/answer.js
+import { post } from '../../../utils/request'
+import { quizSelect } from '../../../utils/apis'
+
 Page({
 
   /**
@@ -64,13 +67,30 @@ Page({
    */
   onLoad(options) {
     console.log(options)
+    this.getQuestions().then(res => {
+      console.log(res)
+    }).finally(() => {
+      this.setData({
+        loadModal: false
+      })
+    })
   },
 
   /**
    * 查询题目列表
    */
   getQuestions() {
-
+    console.log("开始请求后端，查询题目列表")
+    this.setData({
+      loadModal: true
+    })
+    return new Promise((resolve, reject) => {
+      post(quizSelect).then(res => {
+        resolve(res)
+      })
+    }).catch(err => {
+      reject(err)
+    })
   },
 
   /**
