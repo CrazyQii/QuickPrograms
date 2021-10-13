@@ -1,10 +1,16 @@
 // colorui/components/cu-loading/cu-loading.js
 Component({
+  options: {
+    addGlobalClass: true
+  },
   /**
    * 组件的属性列表
    */
   properties: {
-
+    isLoading: {
+      type: [Boolean, String],
+      default: false
+    }
   },
 
   /**

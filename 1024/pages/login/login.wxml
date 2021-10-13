@@ -3,10 +3,10 @@
 </cu-custom>
 
 <!-- 前置页面，请求获取昵称头像权限 -->
-<view class="margin-xl padding-xl bg-white radius shadow shadow-lg">
+<view class="margin-xl padding-xl bg-cyan light radius shadow shadow-lg ">
   <view class="flex justify-center">
     <view wx:if="{{ !hasOpenUserInfo }}" class="padding flex-direction">
-      <button class="cu-btn bg-green lg" bindtap="getOpenUserInfo">获取头像和昵称</button>
+      <button class="cu-btn bg-olive lg" bindtap="getOpenUserInfo">获取头像和昵称</button>
     </view>
     <block wx:else> 
       <view class='text-center'>
@@ -57,3 +57,5 @@
     </view>
   </view>
 </view>
+
+<cu-loading isLoading="{{ loading }}"></cu-loading>

@@ -1,5 +1,5 @@
 <!-- 加载弹框 -->
-<view class='cu-load load-modal'>
+<view class='cu-load load-modal' wx:if="{{ isLoading }}">
   <image src='/images/logo.png' class='png' mode='aspectFit'></image>
   <view class='gray-text'>加载中...</view>
 </view>
