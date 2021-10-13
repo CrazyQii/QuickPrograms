@@ -1,9 +1,6 @@
 /* pages/about/home/home.wxss */
-@import "/colorui/main.wxss";
-@import "/colorui/icon.wxss";
-
 .UCenter-bg {
-  background-image: url(https://image.weilanwl.com/color2.0/index.jpg);
+  background: url('/images/BasicsBg.png');
   background-size: cover;
   height: 550rpx;
   display: flex;

@@ -1,5 +1,5 @@
 <lottery wx:if="{{PageCur=='lottery'}}"></lottery>
-<about wx:if="{{PageCur=='about'}}" ></about>
+<about wx:if="{{PageCur=='about'}}" userInfo="{{userInfo}}"></about>
 
 <view class="cu-bar tabbar bg-white shadow foot">
   <view class="action" bindtap="NavChange" data-cur="lottery">

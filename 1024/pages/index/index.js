@@ -2,10 +2,14 @@ const app = getApp()
 
 Page({
   data: {
-    PageCur: 'lottery'
+    PageCur: 'lottery',
+    userInfo: {}
   },
   onLoad() {
-    console.log(app.globalData.userInfo)
+    this.setData({
+      userInfo: app.globalData.userInfo
+    })
+    console.log("加载缓存信息：" + JSON.stringify(this.data.userInfo))
   },
   NavChange(e) {
     this.setData({

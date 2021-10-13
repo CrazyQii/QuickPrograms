@@ -1,0 +1,21 @@
+<cu-custom bgColor="bg-gradual-pink" isBack="{{true}}">
+  <view slot="backText">返回</view>
+  <view slot="content">获奖记录</view>
+</cu-custom>
+
+<!-- 页面主体 -->
+<view class="cu-timeline" wx:for="{{ lucky_record }}" wx:key="{{ index }}">
+  <block wx:if="{{ item.award_id != -1 }}">
+    <view class="cu-time">{{ item.luck_date }}</view>
+    <view class="cu-item">
+      <view class="content">
+        <view class="cu-capsule radius">
+          <view class="cu-tag bg-cyan">{{ item.draw_type }}</view>
+          <view class="cu-tag line-cyan">{{ item.status }}</view>
+        </view>
+        <view class="margin-top">
+          中奖奖品：{{ item.award_name }}</view>
+      </view> 
+    </view>
+  </block>
+</view>

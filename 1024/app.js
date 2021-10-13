@@ -41,6 +41,8 @@ App({
     })
   },
   globalData: {
-    userInfo: null
+    userInfo: null,
+    awardsConfig: {},
+    runDegs: 0
   }
 })
