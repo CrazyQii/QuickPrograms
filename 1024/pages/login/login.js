@@ -1,5 +1,8 @@
 //index.js
 //获取应用实例
+import { post } from '../../utils/request'
+import { user } from '../../utils/apis'
+
 const app = getApp()
 
 Page({
@@ -14,14 +17,21 @@ Page({
       wx.reLaunch({
         url: '/pages/index/index',
       })
+      return 
+    } 
+    let data = {
+      'code': wx.getStorageSync('code')
     }
+    post(user, data).then(res => {
+      console.log(res)
+    })
   },
 
   /**
    * 调用wx接口，请求用户权限，查询用户信息
    * @param {*} e 
    */
-  getOpenUserInfo: function(e) {
+  getOpenUserInfo() {
     wx.getUserProfile({
       desc: '用于完善用户资料',
       success: res => {

@@ -1,4 +1,5 @@
 //app.js
+
 App({
   onLaunch: function() {
     // 静默登录
@@ -6,6 +7,8 @@ App({
       success: res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
         console.log("静默登录成功，返回结果：" + JSON.stringify(res))
+        // 存储code到本地
+        wx.setStorageSync('code', res.code)
       }
     })
     // 获取用户授权信息
@@ -18,11 +21,6 @@ App({
         console.log("用户登录成功")
       }, fail: err => {
         console.log("本地缓存用户信息不存在，发起后端请求")
-        console.error(err)
-      }, complete () {
-        wx.reLaunch({
-          url: '/pages/login/login',
-        })
       }
     })
 
@@ -42,7 +40,7 @@ App({
   },
   globalData: {
     userInfo: null,
-    host: 'http://150.223.204.125:4443/'
     // host: 'http://150.223.204.125:4443/'
+    host: 'http://172.20.10.11:9090/'
   }
 })
