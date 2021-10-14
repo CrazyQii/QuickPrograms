@@ -11,10 +11,14 @@ const formatTime = date => {
 
 const formatDay = date => {
   // const year = date.getFullYear()
-  const month = date.getMonth() + 1
-  const day = date.getDate()
+  const month = date.split('-')[1]
+  const day = date.split('-')[2]
 
   return month + '月' + day + '日'
+}
+
+const DateToTs = ts => {
+  return new Date(ts).getTime()
 }
 
 const formatNumber = n => {
@@ -24,5 +28,6 @@ const formatNumber = n => {
 
 module.exports = {
   formatTime: formatTime,
-  formatDay: formatDay
+  formatDay: formatDay,
+  DateToTs: DateToTs
 }

@@ -1,15 +1,35 @@
 // 题目模块
-const quizSelect = '/quiz/selectquiz' // 查询每日题目
+const partList = '/api/part/list'
+const quizList = '/api/question/retlist' // 查询每日题目
+const putResult = '/api/answer/putResult'
 
 
 // 用户模块
-const user = '/api/user/loginWechat'
+const getUserToken = '/api/user/loginWechat'
+const postNewUserInfo = '/api/user/putInfo'
+const getUserInfo = '/api/user/info'
+const postOpenUserInfo = '/api/user/putWechat'
+const getLuckyList = '/api/lucky/list'
+const getUserCredit = '/api/credit/info'
+const getLevelList = '/api/level/list'
 
 
 // 抽奖模块
+const postAwardList = '/api/award/list'
+const postAwardResult = '/api/draw/postResult'
 
 
 module.exports = {
-    quizSelect,
-    user
+    getUserToken,
+    postNewUserInfo,
+    getUserInfo,
+    postOpenUserInfo,
+    partList,
+    quizList,
+    putResult,
+    postAwardList,
+    postAwardResult,
+    getLuckyList,
+    getUserCredit,
+    getLevelList
 }

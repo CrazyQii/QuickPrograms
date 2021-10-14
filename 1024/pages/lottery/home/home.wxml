@@ -1,10 +1,10 @@
 <cu-custom bgColor="bg-gradual-blue">
-  <view slot="content">首页答题</view>
+  <view slot="content">1024</view>
 </cu-custom>
 
 <!-- 主页面 -->
 <view class='nav-list margin-top-xl'>
-  <view hover-class='none' class="nav-li bg-{{item.color}}" wx:for="{{elements}}" wx:key="index" bindtap="showModal" id="{{ index }}">
+  <view hover-class='none' class="nav-li {{ itemId - 1 <= index? 'bg-'+item.color: 'bg-grey' }}" wx:for="{{partPage}}" wx:key="index" bindtap="showModal" id="{{ index }}">
     <view class="nav-title">{{item.title}}</view>
     <view class="nav-name">{{item.name}}</view>
   </view>
@@ -21,7 +21,7 @@
       </view>
     </view>
     <view class="padding-xl bg-white">
-      <text class="text-{{ elements[index].color }}">{{ elements[index].name }} - {{ elements[index].title }}</text>
+      <text class="text-{{ partPage[index].color }}">{{ partPage[index].name }} - {{ partPage[index].title }}</text>
     </view>
     <view class="cu-bar bg-white">
       <view class="action margin-0 flex-sub  solid-left" bindtap="cancelModal">取消</view>

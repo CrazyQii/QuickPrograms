@@ -2,38 +2,51 @@
   <view slot="content">闯关答题</view>
 </cu-custom>
 
+
+<!-- 倒计时 -->
+<!-- <view class="cu-bar bg-white margin-top">
+  <view class="action">
+    <text class="cuIcon-title text-blue"></text>剩余时间
+  </view>
+</view>
+<view class="padding bg-white flex">
+  <view class="cu-progress round sm striped active">
+    <view class="bg-green" style="width: {{ time / 60 * 100 + '%'}}">{{ time }}</view>
+  </view>
+</view> -->
+
 <!-- 题目进度条 -->
 <view class="padding bg-white">
   <view class="cu-progress round sm striped active">
-    <view class="bg-green" style="width: {{ currentQuesIndex / questions.length * 100 + '%'}}"></view>
+    <view class="bg-green" style="width: {{ currentQuesIndex / questions.list.length * 100 + '%'}}"></view>
   </view>
 </view>
 
 <!-- 页面主体 -->
 <view class="padding text-center">
-  <block wx:for="{{ questions }}" wx:key="index">
+  <block wx:for="{{ questions.list }}" wx:key="index">
     <view wx:if="{{ index + 1 == currentQuesIndex}}">
       <!-- 题目 -->
       <view class="padding-xl radius shadow-warp bg-white margin-top" style="height: 12rem;">
-        <view>题目{{ index + 1}}</view>
-        <view class="margin-top">{{ item.content }}</view>
+        <view class="text-lg text-black">题目{{ index + 1}}</view>
+        <view class="margin-top text-lg text-black">{{ item.content }}</view>
       </view>
       <!-- 单选框 -->
       <radio-group class="block" bindchange="radioAnswer">
         <view class="cu-form-group margin-top">
-          <view class="title">{{ item.opta }}</view>
+          <view class="title">A.{{ item.opta }}</view>
           <radio class="radio" value="1"></radio>
         </view>
         <view class="cu-form-group">
-          <view class="title">{{ item.optb }}</view>
+          <view class="title">B.{{ item.optb }}</view>
           <radio class="radio" value="2"></radio>
         </view>
         <view class="cu-form-group">
-          <view class="title">{{ item.optc }}</view>
+          <view class="title">C.{{ item.optc }}</view>
           <radio class="radio" value="3"></radio>
         </view>
         <view class="cu-form-group">
-          <view class="title">{{ item.optd }}</view>
+          <view class="title">D.{{ item.optd }}</view>
           <radio class="radio" value="4"></radio>
         </view>
       </radio-group>
@@ -42,10 +55,10 @@
 
   <!-- 操作按钮 -->
   <view class="padding flex flex-direction margin-top">
-    <button class="cu-btn bg-green lg shadow animation-{{ btnShake==true?'shake':'' }}" bindtap="nextQues">{{ btnContent }}</button>
+    <button class="cu-btn bg-green lg shadow animation-{{ btnShake==true?'shake':'' }}" bindtap="nextQues">{{ currentQuesIndex  == questions.list.length? '提交答案': '下一题' }}</button>
   </view>
   
 </view>
 
 <!-- 加载弹框 -->
-<cu-loading wx:if="{{loadModal}}"></cu-loading>
+<cu-loading isLoading="{{ loading }}"></cu-loading>

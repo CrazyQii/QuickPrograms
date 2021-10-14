@@ -1,5 +1,5 @@
-<lottery wx:if="{{PageCur=='lottery'}}"></lottery>
-<about wx:if="{{PageCur=='about'}}" userInfo="{{userInfo}}"></about>
+<lottery wx:if="{{PageCur=='lottery'}}" itemId="{{ itemId }}" partPage="{{ partPage }}"></lottery>
+<about wx:if="{{PageCur=='about'}}" userInfo="{{userInfo}}" level="{{ level }}" userLevel="{{ userLevel }}" isOpenBigAward="{{ isOpenBigAward }}"></about>
 
 <view class="cu-bar tabbar bg-white shadow foot">
   <view class="action" bindtap="NavChange" data-cur="lottery">
@@ -15,3 +15,5 @@
     <view class="{{PageCur=='about'?'text-green':'text-gray'}}">等级</view>
   </view>
 </view>
+
+<cu-loading isLoading="{{ loading }}"></cu-loading>

@@ -1,12 +1,12 @@
 {
   "pages": [
     "pages/login/login",
+    "pages/lottery/answer/answer",
+    "pages/about/record/record",
     "pages/index/index",
     "pages/about/home/home",
-    "pages/about/record/record",
-    "pages/lottery/home/home",
-    "pages/lottery/answer/answer",
     "pages/lottery/result/result",
+    "pages/lottery/home/home",
     "pages/lottery/lottery/lottery"
   ],
   "window": {

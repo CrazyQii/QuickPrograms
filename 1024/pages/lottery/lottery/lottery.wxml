@@ -30,3 +30,6 @@
     <view bindtap="getLottery" class="canvas-btn {{btnDisabled}}">抽奖</view>		
   </view>
 </view>
+
+<!-- 加载弹框 -->
+<cu-loading isLoading="{{ loading }}"></cu-loading>

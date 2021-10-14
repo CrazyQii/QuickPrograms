@@ -1,16 +1,17 @@
 // wx.request封装
 const app = getApp()
 
-const request = (url, options) => {
+const request = (url, options, header) => {
   return new Promise((resolve, reject) => {
     wx.request({
       url: `${app.globalData.host}${url}`,//获取域名接口地址
       method: options.method, //配置method方法
-      data: options.method === 'GET' ? options.data : JSON.stringify(options.data), 
+      // data: options.method === 'GET' ? options.data : JSON.stringify(options.data), 
+      data: options.data, 
       //如果是GET,GET自动让数据成为query String,其他方法需要让options.data转化为字符串
       header: {
-        'Content-Type': 'application/json; charset=UTF-8',
-        //  'token':token // 后台接口凭证         
+        'Content-Type': options.header,
+         'X-LCSCHOOL-TOKEN': wx.getStorageSync('token') // 后台接口凭证         
       },
       //header中可以监听到token值的变化
       success(request) {
@@ -35,14 +36,16 @@ const request = (url, options) => {
 const get = (url, options = {}) => {
   return request(url, {
     method: 'GET',
-    data: options
+    data: options,
+    header: 'application/json; charset=UTF-8'
   })
 }
 //封装post方法
 const post = (url, options) => {
   return request(url, {
     method: 'POST',
-    data: options
+    data: options,
+    header: "application/x-www-form-urlencoded"
   })
 }
 //封装put方法

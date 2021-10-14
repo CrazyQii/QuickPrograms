@@ -1,23 +1,24 @@
 <!-- 主体页面 -->
 <view class="UCenter-bg bg-brown">
-    <image src="{{ userInfo.avatarUrl }}" class="png round" mode="widthFix"></image>
-    <view class="text-xl margin-top">{{ userInfo.nickName }}</view>
+    <image src="{{ userInfo.avatar }}" class="png round" mode="widthFix"></image>
+    <view class="text-xl margin-top">{{ userInfo.nickname }}</view>
     <image src="/images/wave.gif" mode="scaleToFill" class="gif-wave"></image>
 </view>
 
 <view class="padding flex text-center text-grey bg-white shadow-warp">
   <view class="flex flex-sub flex-direction">
-    <view class="text-xxl text-green">{{ grade }}</view>
+    <view class="text-xxl text-green">{{ userLevel.grade }}</view>
     <view class="margin-top-sm">
-      <text class="cuIcon-appreciatefill text-red margin"></text>{{ level_name }}</view>
+      <text class="cuIcon-appreciatefill text-red margin"></text>{{ userLevel.levelName }}</view>
   </view>
 </view>
 
 <!-- 步骤条 -->
-<scroll-view scroll-x class="bg-white padding response cu-steps steps-bottom" scroll-into-view="scroll-{{scroll}}" scroll-with-animation>
-  <view class="cu-item {{index>scroll?'':'text-blue'}} padding-lr-xl" wx:for="{{ level }}" wx:key="index" id="scroll-{{index}}">
+<scroll-view scroll-x class="bg-white padding response cu-steps steps-bottom" scroll-into-view="scroll-{{ userLevel.grade }}" scroll-with-animation>
+  <view class="cu-item {{item.grade <= userLevel.grade ? 'text-blue' : ''}} padding-lr-xl" wx:for="{{ level }}" wx:key="index" id="scroll-{{index}}">
   {{ item.name }} 
-  <image></image>
+  <!-- <image style="width: 50rpx; height: 50rpx;"></image> -->
+  <text class="num" data-index="{{index + 1}}"></text>
   </view>
 </scroll-view>
 
@@ -33,15 +34,14 @@
 
 <!-- 抽奖模块  -->
 <view class="padding-sm">
-  <view class="bg-gradual-orange padding radius text-center shadow-blur" style="height: 10rem;">
+  <view class="bg-gradual-orange padding radius text-center shadow-blur" style="height: 10rem;" wx:if="{{ !isOpenBigAward }}">
     <view class="text-lg">大奖抽奖时间</view>
-    <view class="margin-top-xl  text-xl text-bold">{{ open_time }}</view>
-    <!-- <view class="text-lg">最终大奖倒计时</view>
-    <view class="margin-top-xl  text-xl text-bold">{{ left_time }}</view> -->
+    <view class="margin-top-xl  text-xl text-bold">开始时间：{{ startTime }}</view>
+    <view class="margin-top-xl  text-xl text-bold">结束时间：{{ endTime }}</view>
   </view>
 
   <!-- 抽奖按钮 -->
-  <view class="padding flex flex-direction">
+  <view class="padding flex flex-direction" wx:else>
     <button class="cu-btn bg-red margin-tb-sm lg" bindtap="lottery">开始抽奖</button>
   </view>
 </view>

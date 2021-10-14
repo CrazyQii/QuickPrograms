@@ -4,18 +4,17 @@
 </cu-custom>
 
 <!-- 页面主体 -->
-<view class="cu-timeline" wx:for="{{ lucky_record }}" wx:key="{{ index }}">
-  <block wx:if="{{ item.award_id != -1 }}">
-    <view class="cu-time">{{ item.luck_date }}</view>
-    <view class="cu-item">
-      <view class="content">
-        <view class="cu-capsule radius">
-          <view class="cu-tag bg-cyan">{{ item.draw_type }}</view>
-          <view class="cu-tag line-cyan">{{ item.status }}</view>
-        </view>
-        <view class="margin-top">
-          中奖奖品：{{ item.award_name }}</view>
-      </view> 
+<view class="cu-timeline" wx:for="{{ lucky_record }}" wx:key="index">
+  <view class="cu-time">{{ item.luckDate }}</view>
+  <view class="cu-item">
+    <view class="content">
+      <view class="cu-tag bg-cyan radius">{{ item.drawType == 1 ? '每日抽奖': '最终大奖' }}</view>
+      <view class="flex">
+        <view class="margin-top flex-sub">奖品：{{ item.awardName }}</view>
+        <view class="flex-sub"style="background-image: url('{{ item.photoUrl }}'); height: 200rpx;" ></view>
+      </view>
     </view>
-  </block>
+  </view>
 </view>
+
+<cu-loading isLoading="{{ loading }}"></cu-loading>

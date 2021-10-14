@@ -1,6 +1,6 @@
 // pages/lottery/answer/answer.js
 import { post } from '../../../utils/request'
-import { quizSelect } from '../../../utils/apis'
+import { quizList, putResult } from '../../../utils/apis'
 
 Page({
 
@@ -9,118 +9,120 @@ Page({
    */
   data: {
     currentQuesIndex: 1, // 当前第几题
-    questions: [
-      {
-        'id': 1,
-        'content': '题目1',
-        'opta': '选项a',
-        'optb': '选项b',
-        'optc': '选项c',
-        'optd': '选项d',
-        'yes':  3
-      },
-      {
-        'id': 2,
-        'content': '题目2',
-        'opta': '选项a',
-        'optb': '选项b',
-        'optc': '选项c',
-        'optd': '选项d',
-        'yes':  3
-      },
-      {
-        'id': 3,
-        'content': '题目3',
-        'opta': '选项a',
-        'optb': '选项b',
-        'optc': '选项c',
-        'optd': '选项d',
-        'yes':  3
-      },
-      {
-        'id': 4,
-        'content': '题目4',
-        'opta': '选项a',
-        'optb': '选项b',
-        'optc': '选项c',
-        'optd': '选项d',
-        'yes':  3
-      },
-      {
-        'id': 5,
-        'content': '题目5',
-        'opta': '选项a',
-        'optb': '选项b',
-        'optc': '选项c',
-        'optd': '选项d',
-        'yes':  3
-      }
-    ],
+    questions: [],
     answers: [],
     btnShake: false,
-    btnContent: '下一题',
-    loadModal: false
+    loading: false,
+    time: 5
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad(options) {
-    console.log(options)
-    this.getQuestions().then(res => {
-      console.log(res)
-    }).finally(() => {
+  onLoad(option) {
+    // this.setData({
+    //   questions: {
+    //     'list': [
+    //       {
+    //         'content': '213',
+    //         'opta': 'a',
+    //         'optb': 'b',
+    //         'optc': 'c',
+    //         'optd': 'd',
+    //         'yes': 2
+    //       },
+    //       {
+    //         'content': '213',
+    //         'opta': 'a',
+    //         'optb': 'b',
+    //         'optc': 'c',
+    //         'optd': 'd',
+    //         'yes': 2
+    //       }
+    //     ]
+    //   }
+    // })
+    // this.timer()
+    this.setData({ loading: true })
+    this.getQuestions(option.itemId)
+    .then(res => {
       this.setData({
-        loadModal: false
+        questions: res
       })
+    }).catch(err => {
+      wx.showToast({
+        title: '网络连接超时',
+        icon: 'error',
+        duration: 2000,
+        mask: true
+      })
+      console.error(err)
+      setTimeout(() => {
+        wx.reLaunch({
+          url: '/pages/index/index',
+        })
+      }, 2000)
+    }).finally(() => {
+      this.setData({ loading: false })
     })
   },
 
   /**
    * 查询题目列表
    */
-  getQuestions() {
+  getQuestions(itemId) {
     console.log("开始请求后端，查询题目列表")
-    this.setData({
-      loadModal: true
-    })
     return new Promise((resolve, reject) => {
-      post(quizSelect).then(res => {
-        resolve(res)
+      let data = {
+        'itemId': itemId
+      }
+      post(quizList, data).then(res => {
+        if (res.retno == 0) {
+          console.log("查询题目列表结果：" + JSON.stringify(res))
+          resolve(res.data)
+        } else {
+          reject("查询题目列表失败: " + JSON.stringify(res))
+        }
+      }).catch(err => {
+        reject("查询题目列表失败：" + err)
       })
-    }).catch(err => {
-      reject(err)
     })
   },
 
   /**
    * 切换题目显示
-   * @param {*} currentQuesIndex 当前显示题目索引
    */
   nextQues() {
     // 校验当前题目是否选择单选框
     if (this.data.answers.length != this.data.currentQuesIndex) { // 未选择
-      this.setData({
-        btnShake: true
-      })
-      return
-    } if (this.data.currentQuesIndex == 5) {
-      // 发送后端请求
-      console.log("用户完成答题，发送提交数据请求")
-      this.showLoadModal()
-      // 提交成功，跳转结果展示页面
-      wx.redirectTo({
-        url: '/pages/lottery/result/result',
-        success: res => {
-          this.hideLoadModal()
-        }
+      this.setData({ btnShake: true })
+    } else if (this.data.currentQuesIndex == this.data.questions.list.length) { 
+      this.setData({ loading: true })
+      this.postAnswer().then(res => {
+        // 更新当日答题限制数据
+        let answerDetail = wx.getStorageSync('answerDetail')
+        answerDetail['couldAnswer'] = res['couldAnswer'] // 判断今日是否已经答题
+        answerDetail['itemId'] = res['itemId'] // 今日答题编号
+        wx.setStorageSync('answerDetail', answerDetail)
+
+        //  是否符合参加抽奖资格
+        wx.setStorageSync('lottery', res)
+        wx.redirectTo({
+          url: '/pages/lottery/result/result',
+        })
+      }).catch(err => {
+        wx.showToast({
+          title: '网络连接超时',
+          icon: 'error',
+          duration: 2000,
+          mask: true
+        })
+        console.error(err)
+      }).finally(() => {
+        // 提交成功，跳转结果展示页面
+        this.setData({ loading: false })
       })
     } else {
-      if (this.data.currentQuesIndex + 1 == 5) { // 进入最后一道题
-        this.setData({
-          btnContent: '提交答案'
-        })
-      }
       this.setData({
         btnShake: false,
         currentQuesIndex: this.data.currentQuesIndex + 1
@@ -134,21 +136,50 @@ Page({
    */
   radioAnswer(e) {
     let answers = this.data.answers
-    answers[this.data.currentQuesIndex - 1] = e.detail.value
-    this.setData({
-      answers: answers
+    answers[this.data.currentQuesIndex - 1] = Number(e.detail.value)
+    this.setData({ answers: answers })
+  },
+
+  /**
+   * 提交答题数据
+   */
+  postAnswer() {
+    // 判断正确数量
+    let rightNum = 0
+    this.data.answers.forEach((item, index) => {
+      if (Number(item) == Number(this.data.questions.list[index].yes)) rightNum += 1
+    })
+    console.log("用户完成答题，正确数量：" + rightNum)
+    // 发送请求
+    return new Promise((resolve, reject) => {
+      console.log("发送答题结果")
+      let data = {
+        'answerId': this.data.questions.answerId,
+        'right': rightNum
+      }
+      post(putResult, data).then(res => {
+        if (res.retno == 0) {
+          console.log("提交答题数据结果：" + JSON.stringify(res))
+          resolve(res.data)
+        } else {
+          reject("提交答题数据失败: " + JSON.stringify(res))
+        }
+      }).catch(err => {
+        reject("提交答题数据失败：" + JSON.stringify(err))
+      })
     })
   },
 
-  showLoadModal() {
-    this.setData({
-      loadModal: true
-    })
-  },
-
-  hideLoadModal() {
-    this.setData({
-      loadModal: false
-    })
+  /**
+   * 计时器
+   */
+  timer() {
+    let that = this
+    setTimeout(() => {
+      that.setData({
+        time: this.data.time - 1
+      })
+    }, 1000)
+    
   }
 })
