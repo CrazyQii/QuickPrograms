@@ -13,7 +13,8 @@ Page({
     userLevel: {},
     itemId: '',
     loading: false,
-    isOpenBigAward: false
+    isOpenBigAward: false,
+    last: wx.getStorageSync('last') || false
   },
   onLoad() {
     this.setData({ 'loading': true })

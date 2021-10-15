@@ -43,7 +43,8 @@
 
   <!-- 抽奖按钮 -->
   <view class="padding flex flex-direction" wx:else>
-    <button class="cu-btn bg-red margin-tb-sm lg" style="height: 200rpx;" bindtap="lottery">开启最终大奖</button>
+    <button wx:if="{{ !last }}" class="cu-btn bg-red margin-tb-sm lg" style="height: 150rpx;" bindtap="lottery">开启最终大奖</button>
+    <text wx:else class="cu-btn bg-red margin-tb-sm lg text-center radius" style="height: 150rpx;">已经抽过奖</text>
   </view>
 </view>
 

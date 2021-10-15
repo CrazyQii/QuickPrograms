@@ -8,7 +8,8 @@ Component({
     userInfo: Object,
     level: Array,
     userLevel: Object,
-    isOpenBigAward: Boolean
+    isOpenBigAward: Boolean,
+    last: Boolean
   },
   data: {
     level: [
@@ -39,7 +40,7 @@ Component({
       // }
     ],
     startTime: wx.getStorageSync('answerDetail')['start-time'],
-    endTime: wx.getStorageSync('answerDetail')['end-time'],
+    endTime: wx.getStorageSync('answerDetail')['end-time']
   },
   methods: {
     /**

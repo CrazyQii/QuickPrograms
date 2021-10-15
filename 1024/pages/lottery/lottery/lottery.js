@@ -22,27 +22,32 @@ Page({
     //       {'index': 5, 'name': '10元红包', 'id': 6}
     //     ]
     // }  
-    awardsConfig: {}
+    awardsConfig: {},
+    last: ''
   },
   /**
    * 页面加载，初始化奖盘
    */
   onLoad(option) {
+    this.setData({ last: option.last })
     if (option.last) { // 最终大奖
       this.getLastAwardResult().then(res => {
         wx.setStorageSync('lottery', res)
+        this.initPage()
       }).catch(err => {
-        wx.showToast({
-          title: '抽奖转盘生成失败',
-          icon: 'error',
-          duration: 2000,
-          mask: true,
-          success: () => {
-            
-          }
+        wx.setStorageSync('last', true) // 本地记录是否抽过大奖
+        console.error("大奖抽奖接口结果：" + JSON.stringify(err))
+        wx.redirectTo({
+          url: '/pages/index/index',
         })
       })
-    } 
+    } else {
+      this.initPage()
+    }
+    
+  },
+
+  initPage() {
     this.setData({ loading: true })
     this.getAwardList()
     .then(res => {  // 配置信息
@@ -161,6 +166,94 @@ Page({
         reject("大奖抽奖错误:" + JSON.stringify(err))
       })
     })
+  },
+
+  getBigLottery() { 
+    console.log("开始抽奖")
+    wx.setStorageSync('last', true) // 本地记录是否抽过大奖
+    let that = this
+    // 获取抽奖次数、奖品配置、转盘旋转次数、旋转角度
+    let lotteryTimes = this.data.lotteryTimes,
+      awardsConfig = this.data.awardsConfig,
+      runNum = this.data.runNum,
+      runDegs = this.data.runDegs
+
+    // 生成中奖索引
+    let awardId = wx.getStorageSync('lottery')['awardId']
+    let awardIndex = -1
+    if ( awardId != null ) {
+      awardsConfig.awards.forEach((item, index) => {
+        if (item['id'] == awardId) awardIndex = index
+      })
+    }
+
+    // 旋转抽奖
+    runDegs = runDegs + (360 - runDegs % 360) + (360 * runNum - awardIndex * (360 / this.data.awardsConfig.awards.length))
+
+    // 创建动画
+    var animationRun = wx.createAnimation({
+      duration: 4000,
+      timingFunction: 'ease'
+    })
+    that.animationRun = animationRun
+    animationRun.rotate(runDegs).step()
+    that.setData({
+      animationData: animationRun.export(),
+      btnDisabled: 'disabled'
+    })
+
+    if (awardIndex == -1) {
+      console.log("用户没有抽中奖品")
+      setTimeout(function() {
+        wx.showModal({
+          title: '提示',
+          content: '很遗憾，您没有抽中最终奖品',
+          showCancel: false,
+          success: () => {
+            // 记录抽奖次数
+            that.setData({ lotteryTimes: lotteryTimes - 1 })
+            if (that.data.lotteryTimes <= 0) { // 抽奖次数使用完毕
+              awardsConfig.chance = false
+            }
+            if (awardsConfig.chance) {
+              that.setData({
+                btnDisabled: ''
+              }) 
+            } else {
+              wx.redirectTo({
+                url: '/pages/index/index',
+              })
+            }
+          }
+        })
+      }, 4000);
+      return
+    }
+
+    // 中奖提示
+    setTimeout(function() {
+      wx.showModal({
+        title: '恭喜',
+        content: '获得' + (awardsConfig.awards[awardIndex].name) + ', 已放入您的背包中',
+        showCancel: false,
+        success: () => {
+          // 记录抽奖次数
+          that.setData({ lotteryTimes: lotteryTimes - 1 })
+          if (that.data.lotteryTimes <= 0) { // 抽奖次数使用完毕
+            awardsConfig.chance = false
+          }
+          if (awardsConfig.chance) {
+            that.setData({
+              btnDisabled: ''
+            }) 
+          } else {
+            wx.redirectTo({
+              url: '/pages/index/index',
+            })
+          }
+        }
+      })
+    }, 4000);
   },
 
   /**
@@ -287,9 +380,9 @@ Page({
         } else {
           reject("上传抽奖结果失败：" + JSON.stringify(res))
         }
-      })
-    }).catch(err => {
-      reject("上传抽奖结果失败：" + JSON.stringify(err))
-    }) 
+      }).catch(err => {
+        reject("上传抽奖结果失败：" + JSON.stringify(err))
+      }) 
+    })
   }
 })

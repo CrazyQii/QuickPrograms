@@ -27,7 +27,8 @@
         </view>
       </view>
     </view>
-    <view bindtap="getLottery" class="canvas-btn {{btnDisabled}}">抽奖</view>		
+    <view wx:if="{{ last }}" bindtap="getBigLottery" class="canvas-btn {{btnDisabled}}">抽大奖</view>
+    <view wx:else bindtap="getLottery" class="canvas-btn {{btnDisabled}}">抽奖</view>		
   </view>
 </view>
 
