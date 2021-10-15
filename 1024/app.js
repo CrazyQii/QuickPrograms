@@ -30,7 +30,8 @@ App({
   },
   globalData: {
     userInfo: null,
-    host: 'http://172.20.10.11:9090',
+    // host: 'http://172.20.10.11:9090',  // 本地
+    host: 'http://139.9.85.41:9090', // 服务器
     colorList: [{
       title: '嫣红',
       name: 'red',

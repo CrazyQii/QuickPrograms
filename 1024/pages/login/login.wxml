@@ -6,15 +6,15 @@
 <view class="margin-xl padding-xl bg-cyan light radius shadow shadow-lg ">
   <view class="flex justify-center">
     <view wx:if="{{ !hasOpenUserInfo }}" class="padding flex-direction">
-      <button class="block cu-btn bg-olive lg" bindtap="getOpenUserInfo" disabled="{{ disableBtn }}">获取头像和昵称</button>
+      <button class="block cu-btn bg-olive lg" bindtap="getOpenUserInfo" disabled="{{ disableBtn }}">微信授权头像昵称</button>
       <view class="text-center margin-top-xl text-red" wx:if="{{ disableBtn }}">
-        token获取失败，请重新加载小程序
+        最新token获取失败，请重新加载小程序
       </view>
     </view>
     <block wx:else> 
       <view class='text-center'>
-        <view class="cu-avatar xl round solids" style="background-image:url({{userInfo.avatarUrl}})"></view>
-        <view class="padding">{{userInfo.nickName}}</view>
+        <view class="cu-avatar xl round solids" style="background-image:url({{userInfo.avatar}})"></view>
+        <view class="padding">{{userInfo.nickname}}</view>
       </view>
     </block>
   </view>
@@ -39,7 +39,12 @@
   </view>
   <view class="cu-form-group">
     <view class="title">科室:</view>
-    <input name="depart"></input>
+    <picker bindchange="changeDepart" value="{{ depart }}" range="{{ departPicker }}">
+			<view class="picker">
+				{{ depart }}
+			</view>
+		</picker>
+    <!-- <input name="depart"></input> -->
   </view>
   <view class="padding flex flex-direction">
     <button class="margin-top cu-btn bg-green lg" formType="submit">注册</button>

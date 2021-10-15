@@ -47,7 +47,7 @@ Component({
      */
     lottery() {
       wx.navigateTo({
-        url: '/pages/lottery/lottery/lottery',
+        url: '/pages/lottery/lottery/lottery?last=true',
       })
     }
   }

@@ -4,23 +4,23 @@
 
 
 <!-- 倒计时 -->
-<!-- <view class="cu-bar bg-white margin-top">
+<view class="cu-bar bg-white margin-top">
   <view class="action">
-    <text class="cuIcon-title text-blue"></text>剩余时间
+    <text class="cuIcon-title text-blue"></text>剩余时间: <text class="text-center {{ leftTime <= 10? 'text-red': '' }} {{ scaleDown ? 'animation-scale-down': ''}}">{{ leftTime }} 秒</text>
   </view>
 </view>
 <view class="padding bg-white flex">
   <view class="cu-progress round sm striped active">
-    <view class="bg-green" style="width: {{ time / 60 * 100 + '%'}}">{{ time }}</view>
+    <view class="bg-green" style="width: {{ leftTime / fullTime * 100 + '%'}}">{{ leftTime }}</view>
   </view>
-</view> -->
+</view>
 
-<!-- 题目进度条 -->
+<!-- 题目进度条
 <view class="padding bg-white">
   <view class="cu-progress round sm striped active">
     <view class="bg-green" style="width: {{ currentQuesIndex / questions.list.length * 100 + '%'}}"></view>
   </view>
-</view>
+</view> -->
 
 <!-- 页面主体 -->
 <view class="padding text-center">

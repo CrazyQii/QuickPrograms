@@ -72,7 +72,7 @@ Page({
     })
     let startTime = DateToTs(wx.getStorageSync('answerDetail')['start-time'])
     let endTime = DateToTs(wx.getStorageSync('answerDetail')['end-time'])
-    let now = DateToTs(new Date())
+    let now = DateToTs(new Date('2021-10-27 02:00:00'))
     if (now >= startTime && now <= endTime) {
       this.setData({ isOpenBigAward: true })
     } else {

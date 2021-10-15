@@ -7,9 +7,10 @@
 
 <view class="padding flex text-center text-grey bg-white shadow-warp">
   <view class="flex flex-sub flex-direction">
-    <view class="text-xxl text-green">{{ userLevel.grade }}</view>
-    <view class="margin-top-sm">
-      <text class="cuIcon-appreciatefill text-red margin"></text>{{ userLevel.levelName }}</view>
+    <view class="text-xl text-olive">当前积分：{{ userLevel.grade }}</view>
+    <view class="margin-top-sm text-xl">
+      <text class="cuIcon-upstage text-orange margin">{{ userLevel.levelName }}</text>
+    </view>
   </view>
 </view>
 
@@ -33,8 +34,8 @@
 </view>
 
 <!-- 抽奖模块  -->
-<view class="padding-sm">
-  <view class="bg-gradual-orange padding radius text-center shadow-blur" style="height: 10rem;" wx:if="{{ !isOpenBigAward }}">
+<view class="padding-sm" >
+  <view class="bg-gradual-orange padding radius text-center shadow-blur" wx:if="{{ !isOpenBigAward }}">
     <view class="text-lg">大奖抽奖时间</view>
     <view class="margin-top-xl  text-xl text-bold">开始时间：{{ startTime }}</view>
     <view class="margin-top-xl  text-xl text-bold">结束时间：{{ endTime }}</view>
@@ -42,8 +43,10 @@
 
   <!-- 抽奖按钮 -->
   <view class="padding flex flex-direction" wx:else>
-    <button class="cu-btn bg-red margin-tb-sm lg" bindtap="lottery">开始抽奖</button>
+    <button class="cu-btn bg-red margin-tb-sm lg" style="height: 200rpx;" bindtap="lottery">开启最终大奖</button>
   </view>
 </view>
+
+<view class='cu-tabbar-height'></view>
 
 

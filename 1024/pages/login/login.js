@@ -12,7 +12,9 @@ Page({
     modal: false,
     modalInfo: '',
     loading: false,
-    disableBtn: false
+    disableBtn: false,
+    depart: '',
+    departPicker: ['喵喵喵', '汪汪汪', '哼唧哼唧'],
   },
   onLoad() {
     if (app.globalData.userInfo) { // 信息存在，跳转到主页，信息不存在，需要用户注册信息
@@ -149,9 +151,15 @@ Page({
         }
         post(postOpenUserInfo, data).then(res => {
           if (res.retno == 0) {
-            // let userInfo = res
+            console.info("上传头像和昵称结果：" + JSON.stringify(res))
+            // 字典键修改,更新格式
+            let userInfo = e.userInfo
+            userInfo['nickname'] = userInfo['nickName']
+            userInfo['avatar'] = userInfo['avatarUrl']
+            delete userInfo['nickName']
+            delete userInfo['avatarUrl']
             this.setData({
-              userInfo: e.userInfo,
+              userInfo: userInfo,
               hasOpenUserInfo: true
             })
           } else {
@@ -196,9 +204,9 @@ Page({
   register(e) {
     console.log(e)
     // 校验参数是否正确
-    if (e.detail.value.concat == '' || e.detail.value.concat == null || 
-    e.detail.value.mobile == '' || e.detail.value.mobile == null || 
-    e.detail.value.depart == '' || e.detail.value.depart == null) {
+    if (e.detail.value.concat.trim() == '' || e.detail.value.concat == null || 
+    e.detail.value.mobile.trim() == '' || e.detail.value.mobile == null || 
+    e.detail.value.depart.trim() == '' || e.detail.value.depart == null) {
       this.showModal('个人信息不能为空')
       return
     } 
@@ -268,6 +276,16 @@ Page({
         reject("提交数据用户数据失败：" + JSON.stringify(err))
       })
     })
+  },
+
+  /**
+   * 部门下拉框选择
+   */
+  changeDepart(e) {
+    this.setData({
+      depart: e.detail.value
+    })
+    console.log(this.data.depart)
   },
 
   /**

@@ -17,7 +17,7 @@ const getLevelList = '/api/level/list'
 // 抽奖模块
 const postAwardList = '/api/award/list'
 const postAwardResult = '/api/draw/postResult'
-
+const postDrawLast = '/api/draw/last' // 最后一天大奖
 
 module.exports = {
     getUserToken,
@@ -31,5 +31,6 @@ module.exports = {
     postAwardResult,
     getLuckyList,
     getUserCredit,
-    getLevelList
+    getLevelList,
+    postDrawLast
 }

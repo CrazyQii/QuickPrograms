@@ -13,7 +13,9 @@ Page({
     answers: [],
     btnShake: false,
     loading: false,
-    time: 5
+    fullTime: 15,
+    leftTime: 15,
+    count: ''  // 定时器名称
   },
 
   /**
@@ -42,13 +44,15 @@ Page({
     //     ]
     //   }
     // })
-    // this.timer()
+    // this.timer() // 开启定时器
+    
     this.setData({ loading: true })
     this.getQuestions(option.itemId)
     .then(res => {
       this.setData({
         questions: res
       })
+      this.timer() // 开启定时器
     }).catch(err => {
       wx.showToast({
         title: '网络连接超时',
@@ -96,13 +100,14 @@ Page({
     // 校验当前题目是否选择单选框
     if (this.data.answers.length != this.data.currentQuesIndex) { // 未选择
       this.setData({ btnShake: true })
-    } else if (this.data.currentQuesIndex == this.data.questions.list.length) { 
+    } else if (this.data.currentQuesIndex == this.data.questions.list.length) {
+      // 提交数据
       this.setData({ loading: true })
       this.postAnswer().then(res => {
         // 更新当日答题限制数据
         let answerDetail = wx.getStorageSync('answerDetail')
         answerDetail['couldAnswer'] = res['couldAnswer'] // 判断今日是否已经答题
-        answerDetail['itemId'] = res['itemId'] // 今日答题编号
+        answerDetail['itemId'] = res['itemId'] + 1 // 本地自动更新答题编号
         wx.setStorageSync('answerDetail', answerDetail)
 
         //  是否符合参加抽奖资格
@@ -122,7 +127,10 @@ Page({
         // 提交成功，跳转结果展示页面
         this.setData({ loading: false })
       })
-    } else {
+    } else { // 进入下一题
+      // 重新设置定时器
+      this.timer()
+      // 定时器设置完毕
       this.setData({
         btnShake: false,
         currentQuesIndex: this.data.currentQuesIndex + 1
@@ -144,6 +152,9 @@ Page({
    * 提交答题数据
    */
   postAnswer() {
+    // 点击提交按钮，说明用户提前完成答题，清除定时任务
+    clearInterval(this.data.count)
+
     // 判断正确数量
     let rightNum = 0
     this.data.answers.forEach((item, index) => {
@@ -174,12 +185,31 @@ Page({
    * 计时器
    */
   timer() {
-    let that = this
-    setTimeout(() => {
-      that.setData({
-        time: this.data.time - 1
-      })
-    }, 1000)
-    
-  }
+    let that = this 
+    // 清除旧定时器
+    clearInterval(this.data.count)
+    // 更新时间
+    this.setData({ leftTime: this.data.fullTime })
+    // 设置新定时器
+    this.setData({
+      count: setInterval(() => {
+        let time = that.data.leftTime
+        if (time <= 10) { // 倒计时闪烁
+          if (time % 2 == 0) that.setData({ scaleDown: true })
+          else that.setData({ scaleDown: false })
+        }
+        if (time == 0) { // 计时结束，说明用户没有完成当前题目选择
+          // 设置答案为-1，说明必定为错
+          let answers = that.data.answers
+          answers[that.data.currentQuesIndex - 1] = -1
+          that.setData({ answers: answers })
+          // 调用跳转下一题接口
+          // clearInterval(that.data.count); // 清除当前定时任务
+          that.nextQues()
+          return;
+        }
+        that.setData({ leftTime: time - 1 })
+    },1000)
+    })
+  }  
 })

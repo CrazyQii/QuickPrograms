@@ -1,5 +1,5 @@
 import { post } from '../../../utils/request'
-import { postAwardList, postAwardResult } from '../../../utils/apis'
+import { postAwardList, postAwardResult, postDrawLast } from '../../../utils/apis'
 
 Page({
   data: {
@@ -27,7 +27,12 @@ Page({
   /**
    * 页面加载，初始化奖盘
    */
-  onLoad() {
+  onLoad(option) {
+    if (option.last) { // 最终大奖
+      this.getLastAwardResult().then(res => {
+        wx.setStorageSync('lottery', res)
+      })
+    } 
     this.setData({ loading: true })
     this.getAwardList()
     .then(res => {  // 配置信息
@@ -118,6 +123,7 @@ Page({
     return new Promise((resolve, reject) => {
       post(postAwardList).then(res => {
         if (res.retno == 0) {
+          res.data.push({'id': -1, 'name': "未中奖"})
           console.log("加载奖品列表结果：" + JSON.stringify(res))
           resolve(res.data)
         } else {
@@ -130,27 +136,47 @@ Page({
   },
 
   /**
+   * 最后一天大奖抽奖结果
+   */
+  getLastAwardResult() {
+    return new Promise((resolve, reject) => {
+      post(postDrawLast).then(res => {
+        if (res.retno == 0) {
+          console.log("大奖抽奖结果：" + JSON.stringify(res))
+          resolve(res.data)
+        } else {
+          reject("大奖抽奖错误:" + JSON.stringify(res))
+        }
+      }).catch(err => {
+        reject("大奖抽奖错误:" + JSON.stringify(err))
+      })
+    })
+  },
+
+  /**
    * 动画抽奖逻辑
    */
   getLottery() {
     console.log("开始抽奖")
     let that = this
     // 获取抽奖次数、奖品配置、转盘旋转次数、旋转角度
-    let awardId = wx.getStorageSync('lottery')['awardId'],
-      lotteryTimes = this.data.lotteryTimes,
+    let lotteryTimes = this.data.lotteryTimes,
       awardsConfig = this.data.awardsConfig,
       runNum = this.data.runNum,
       runDegs = this.data.runDegs
 
     // 生成中奖索引
-    // awardIndex = Math.round(Math.random()* 6);
+    let awardId = wx.getStorageSync('lottery')['awardId']
     let awardIndex = -1
-    awardsConfig.awards.forEach((item, index) => {
-      if (item['id'] == awardId) awardIndex = index
-    })
+    if ( awardId != null ) {
+      console.log(awardId)
+      awardsConfig.awards.forEach((item, index) => {
+        if (item['id'] == awardId) awardIndex = index
+      })
+    }
 
     // 旋转抽奖
-    runDegs = runDegs + (360 - runDegs % 360) + (360 * runNum - awardIndex * (360 / 6))
+    runDegs = runDegs + (360 - runDegs % 360) + (360 * runNum - awardIndex * (360 / this.data.awardsConfig.awards.length))
 
     // 创建动画
     var animationRun = wx.createAnimation({
@@ -164,7 +190,35 @@ Page({
       btnDisabled: 'disabled'
     })
 
-    // 记录奖品
+    if (awardIndex == -1) {
+      console.log("用户没有抽中奖品")
+      setTimeout(function() {
+        wx.showModal({
+          title: '提示',
+          content: '很遗憾，您没有抽中奖品，明天继续加油',
+          showCancel: false,
+          success: () => {
+            // 记录抽奖次数
+            that.setData({ lotteryTimes: lotteryTimes - 1 })
+            if (that.data.lotteryTimes <= 0) { // 抽奖次数使用完毕
+              awardsConfig.chance = false
+            }
+            if (awardsConfig.chance) {
+              that.setData({
+                btnDisabled: ''
+              }) 
+            } else {
+              wx.reLaunch({
+                url: '/pages/index/index',
+              })
+            }
+          }
+        })
+      }, 4000);
+      return
+    }
+    
+    // 抽中奖品，记录并上传
     let award = {
       'awardId': awardsConfig.awards[awardIndex]['id'],
       'awardName': awardsConfig.awards[awardIndex]['name'],

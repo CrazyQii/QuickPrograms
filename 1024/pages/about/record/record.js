@@ -35,9 +35,11 @@ Page({
     this.setData({ loading: true })
     // 请求后端接口，拿取用户信息
     this.getLuckies().then(res => {
-      res.forEach(element => {
-        element['luckDate'] = formatDay(element['luckDate'])
-      });
+      if (res.length != 0) {
+        res.forEach(element => {
+          element['luckDate'] = formatDay(element['luckDate'])
+        });
+      }
       this.setData({
         'lucky_record': res
       })
