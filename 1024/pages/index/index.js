@@ -15,13 +15,17 @@ Page({
     loading: false,
     isOpenBigAward: false,
     noStartAndOverDue: false,
-    last: wx.getStorageSync('last') || false
+    last: wx.getStorageSync('last') || false,
+    startTime: wx.getStorageSync('answerDetail')['start-time'],
+    endTime: wx.getStorageSync('answerDetail')['end-time'],
   },
 
   onLoad(option) {
     this.setData({ 
       'loading': true,
-      'last': option['last'] || wx.getStorageSync('last')
+      'last': option['last'] || wx.getStorageSync('last') || false,
+      'startTime': wx.getStorageSync('answerDetail')['start-time'],
+      'endTime': wx.getStorageSync('answerDetail')['end-time'],
     })
     this.initPartPage().then(res => { // 初始化关卡
       res.forEach((item, index) => {

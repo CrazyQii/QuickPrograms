@@ -10,7 +10,9 @@ Component({
     userLevel: Object,
     isOpenBigAward: Boolean,
     noStartAndOverDue: Boolean,
-    last: Boolean
+    last: Boolean,
+    startTime: String,
+    endTime: String
   },
   data: {
     level: [
@@ -39,9 +41,7 @@ Component({
       //   'grade': 30,
       //   'lvcode': 5
       // }
-    ],
-    startTime: wx.getStorageSync('answerDetail')['start-time'],
-    endTime: wx.getStorageSync('answerDetail')['end-time']
+    ]
   },
   methods: {
     /**
