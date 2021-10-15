@@ -12,9 +12,7 @@ Page({
     modal: false,
     modalInfo: '',
     loading: false,
-    disableBtn: false,
-    depart: '',
-    departPicker: ['喵喵喵', '汪汪汪', '哼唧哼唧'],
+    disableBtn: false
   },
   onLoad() {
     if (app.globalData.userInfo) { // 信息存在，跳转到主页，信息不存在，需要用户注册信息

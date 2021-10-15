@@ -39,12 +39,7 @@
   </view>
   <view class="cu-form-group">
     <view class="title">科室:</view>
-    <picker bindchange="changeDepart" value="{{ depart }}" range="{{ departPicker }}">
-			<view class="picker">
-				{{ depart }}
-			</view>
-		</picker>
-    <!-- <input name="depart"></input> -->
+    <input name="depart"></input>
   </view>
   <view class="padding flex flex-direction">
     <button class="margin-top cu-btn bg-green lg" formType="submit">注册</button>

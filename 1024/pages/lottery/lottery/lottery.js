@@ -31,6 +31,16 @@ Page({
     if (option.last) { // 最终大奖
       this.getLastAwardResult().then(res => {
         wx.setStorageSync('lottery', res)
+      }).catch(err => {
+        wx.showToast({
+          title: '抽奖转盘生成失败',
+          icon: 'error',
+          duration: 2000,
+          mask: true,
+          success: () => {
+            
+          }
+        })
       })
     } 
     this.setData({ loading: true })
