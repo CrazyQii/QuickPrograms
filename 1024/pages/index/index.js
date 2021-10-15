@@ -14,10 +14,15 @@ Page({
     itemId: '',
     loading: false,
     isOpenBigAward: false,
+    noStartAndOverDue: false,
     last: wx.getStorageSync('last') || false
   },
-  onLoad() {
-    this.setData({ 'loading': true })
+
+  onLoad(option) {
+    this.setData({ 
+      'loading': true,
+      'last': option['last'] || wx.getStorageSync('last')
+    })
     this.initPartPage().then(res => { // 初始化关卡
       res.forEach((item, index) => {
         item['title'] = '第' + (index + 1) + '关'
@@ -73,11 +78,21 @@ Page({
     })
     let startTime = DateToTs(wx.getStorageSync('answerDetail')['start-time'])
     let endTime = DateToTs(wx.getStorageSync('answerDetail')['end-time'])
-    let now = DateToTs(new Date('2021-10-27 02:00:00'))
+    let now = DateToTs(new Date())
     if (now >= startTime && now <= endTime) {
       this.setData({ isOpenBigAward: true })
     } else {
-      this.setData({ isOpenBigAward: false })
+      if (now > endTime) {
+        this.setData({ 
+          isOpenBigAward: false,
+          noStartAndOverDue: false // 未开始
+        })
+      } else if (now < startTime) {
+        this.setData({ 
+          isOpenBigAward: false,
+          noStartAndOverDue: true // 已结束
+        })
+      }
     }
   },
 

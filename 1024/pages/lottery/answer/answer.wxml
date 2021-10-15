@@ -34,20 +34,20 @@
       <!-- 单选框 -->
       <radio-group class="block" bindchange="radioAnswer">
         <view class="cu-form-group margin-top">
-          <view class="title">A.{{ item.opta }}</view>
-          <radio class="radio" value="1"></radio>
+          <view class="title" bindtap="clickItem" data-id="1" style="width: 100%;">A.{{ item.opta }}</view>
+          <radio class="radio" value="1" checked="{{ checked==1?true:false }}"></radio>
         </view>
         <view class="cu-form-group">
-          <view class="title">B.{{ item.optb }}</view>
-          <radio class="radio" value="2"></radio>
+          <view class="title" bindtap="clickItem" data-id="2" style="width: 100%;">B.{{ item.optb }}</view>
+          <radio class="radio" value="2" checked="{{ checked==2?true:false }}"></radio>
         </view>
         <view class="cu-form-group">
-          <view class="title">C.{{ item.optc }}</view>
-          <radio class="radio" value="3"></radio>
+          <view class="title" bindtap="clickItem" data-id="3" style="width: 100%;">C.{{ item.optc }}</view>
+          <radio class="radio" value="3" checked="{{ checked==3?true:false }}"></radio>
         </view>
         <view class="cu-form-group">
-          <view class="title">D.{{ item.optd }}</view>
-          <radio class="radio" value="4"></radio>
+          <view class="title" bindtap="clickItem" data-id="4" style="width: 100%;">D.{{ item.optd }}</view>
+          <radio class="radio" value="4" checked="{{ checked==4?true:false }}"></radio>
         </view>
       </radio-group>
     </view>

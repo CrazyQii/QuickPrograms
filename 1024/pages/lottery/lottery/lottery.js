@@ -38,7 +38,7 @@ Page({
         wx.setStorageSync('last', true) // 本地记录是否抽过大奖
         console.error("大奖抽奖接口结果：" + JSON.stringify(err))
         wx.redirectTo({
-          url: '/pages/index/index',
+          url: '/pages/index/index?last=' + true
         })
       })
     } else {
@@ -221,39 +221,38 @@ Page({
               }) 
             } else {
               wx.redirectTo({
-                url: '/pages/index/index',
+                url: '/pages/index/index?last=' + true,
+              })
+            }
+          }
+        })
+      }, 4000); 
+    } else {
+      // 中奖提示
+      setTimeout(function() {
+        wx.showModal({
+          title: '恭喜',
+          content: '获得' + (awardsConfig.awards[awardIndex].name) + ', 已放入您的背包中',
+          showCancel: false,
+          success: () => {
+            // 记录抽奖次数
+            that.setData({ lotteryTimes: lotteryTimes - 1 })
+            if (that.data.lotteryTimes <= 0) { // 抽奖次数使用完毕
+              awardsConfig.chance = false
+            }
+            if (awardsConfig.chance) {
+              that.setData({
+                btnDisabled: ''
+              }) 
+            } else {
+              wx.redirectTo({
+                url: '/pages/index/index?last=' + true,
               })
             }
           }
         })
       }, 4000);
-      return
     }
-
-    // 中奖提示
-    setTimeout(function() {
-      wx.showModal({
-        title: '恭喜',
-        content: '获得' + (awardsConfig.awards[awardIndex].name) + ', 已放入您的背包中',
-        showCancel: false,
-        success: () => {
-          // 记录抽奖次数
-          that.setData({ lotteryTimes: lotteryTimes - 1 })
-          if (that.data.lotteryTimes <= 0) { // 抽奖次数使用完毕
-            awardsConfig.chance = false
-          }
-          if (awardsConfig.chance) {
-            that.setData({
-              btnDisabled: ''
-            }) 
-          } else {
-            wx.redirectTo({
-              url: '/pages/index/index',
-            })
-          }
-        }
-      })
-    }, 4000);
   },
 
   /**

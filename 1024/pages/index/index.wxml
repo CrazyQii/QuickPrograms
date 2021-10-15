@@ -1,6 +1,6 @@
 <view class="bg-img padding-bottom-xl" style="background-image: url('https://123.60.26.154/home.png'); height: 100%;d">
   <lottery wx:if="{{PageCur=='lottery'}}" itemId="{{ itemId }}" partPage="{{ partPage }}"></lottery>
-  <about wx:if="{{PageCur=='about'}}" userInfo="{{userInfo}}" level="{{ level }}" userLevel="{{ userLevel }}" isOpenBigAward="{{ isOpenBigAward }}" last="{{ last }}"></about>
+  <about wx:if="{{PageCur=='about'}}" userInfo="{{userInfo}}" level="{{ level }}" userLevel="{{ userLevel }}" isOpenBigAward="{{ isOpenBigAward }}" noStartAndOverDue="{{ noStartAndOverDue }}" last="{{ last }}"></about>
 
   <view class="cu-bar tabbar bg-white shadow foot">
     <view class="action" bindtap="NavChange" data-cur="lottery">

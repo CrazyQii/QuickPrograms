@@ -13,8 +13,8 @@ Page({
     answers: [],
     btnShake: false,
     loading: false,
-    fullTime: 15,
-    leftTime: 15,
+    fullTime: 30,
+    leftTime: 30,
     count: ''  // 定时器名称
   },
 
@@ -62,7 +62,7 @@ Page({
       })
       console.error(err)
       setTimeout(() => {
-        wx.reLaunch({
+        wx.redirectT({
           url: '/pages/index/index',
         })
       }, 2000)
@@ -97,6 +97,7 @@ Page({
    * 切换题目显示
    */
   nextQues() {
+    this.setData({ checked: '' })
     // 校验当前题目是否选择单选框
     if (this.data.answers.length != this.data.currentQuesIndex) { // 未选择
       this.setData({ btnShake: true })
@@ -143,9 +144,22 @@ Page({
    * @param {*} e 
    */
   radioAnswer(e) {
+    console.log(e)
     let answers = this.data.answers
     answers[this.data.currentQuesIndex - 1] = Number(e.detail.value)
     this.setData({ answers: answers })
+  },
+
+  /**
+   * 点击单选框条目
+   */
+  clickItem(e) {
+    let answers = this.data.answers
+    answers[this.data.currentQuesIndex - 1] = Number(e.target.dataset.id)
+    this.setData({ 
+      answers: answers,
+      checked: Number(e.target.dataset.id)
+     })
   },
 
   /**
