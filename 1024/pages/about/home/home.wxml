@@ -27,8 +27,8 @@
 <view class="cu-list menu card-menu margin-top-xl margin-bottom-xl shadow-lg radius">
   <view class="cu-item arrow">
     <navigator class="content" url="/pages/about/record/record" hover-class="none">
-      <text class="cuIcon-goods text-gray"></text>
-      <text class="text-grey">我的背包</text>
+      <text class="cuIcon-goods text-brown"></text>
+      <text class="text-brown">我的背包</text>
     </navigator>
   </view>
 </view>
@@ -37,8 +37,8 @@
 <view class="padding-sm" >
   <view class="bg-gradual-orange padding radius text-center shadow-blur" wx:if="{{ !isOpenBigAward }}">
     <view class="text-xl text-bold">大奖抽奖时间
-      <text wx:if="{{ noStartAndOverDue }}">（活动未开始）</text>
-      <text wx:if="{{ !noStartAndOverDue }}">（活动已结束）</text>
+      <text wx:if="{{ noStartAndOverDue == true }}">（活动未开始）</text>
+      <text wx:if="{{ noStartAndOverDue == false }}">（活动已结束）</text>
     </view>
     <view class="margin-top-xl  text-lg">开始时间：{{ startTime }}</view>
     <view class="margin-top-xl  text-lg">结束时间：{{ endTime }}</view>

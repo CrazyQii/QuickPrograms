@@ -16,7 +16,7 @@ Page({
    */
   toLottery() {
     wx.redirectTo({
-      url: '/pages/lottery/lottery/lottery?last=false',
+      url: '/pages/lottery/lottery/lottery?lastLottery=' + false,
     })
   },
 

@@ -15,41 +15,15 @@ Component({
     endTime: String
   },
   data: {
-    level: [
-      // {
-      //   'name': '第一级',
-      //   'grade': 10,
-      //   'lvcode': 1
-      // },
-      // {
-      //   'name': '第二级',
-      //   'grade': 15,
-      //   'lvcode': 2
-      // },
-      // {
-      //   'name': '第三级',
-      //   'grade': 20,
-      //   'lvcode': 3
-      // },
-      // {
-      //   'name': '第四级',
-      //   'grade': 25,
-      //   'lvcode': 4
-      // },
-      // {
-      //   'name': '第五级',
-      //   'grade': 30,
-      //   'lvcode': 5
-      // }
-    ]
+    level: []
   },
   methods: {
     /**
      * 抽奖按钮
      */
     lottery() {
-      wx.navigateTo({
-        url: '/pages/lottery/lottery/lottery?last=true',
+      wx.redirectTo({
+        url: '/pages/lottery/lottery/lottery?lastLottery=' + true,
       })
     }
   }

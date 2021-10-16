@@ -13,8 +13,8 @@ Page({
     answers: [],
     btnShake: false,
     loading: false,
-    fullTime: 30,
-    leftTime: 30,
+    fullTime: 120,
+    leftTime: 120,
     count: ''  // 定时器名称
   },
 
@@ -93,6 +93,24 @@ Page({
     })
   },
 
+  checkRight() {
+    if (this.data.answers[this.data.currentQuesIndex - 1] == this.data.questions.list[this.data.currentQuesIndex - 1]['yes']) {
+      wx.showToast({
+        title: '回答正确',
+        icon: 'success',
+        duration: 1000,
+        mask: true
+      })
+    } else {
+      wx.showToast({
+        title: '回答错误',
+        icon: 'error',
+        duration: 1000,
+        mask: true
+      })
+    }
+  },
+
   /**
    * 切换题目显示
    */
@@ -101,8 +119,8 @@ Page({
     // 校验当前题目是否选择单选框
     if (this.data.answers.length != this.data.currentQuesIndex) { // 未选择
       this.setData({ btnShake: true })
-    } else if (this.data.currentQuesIndex == this.data.questions.list.length) {
-      // 提交数据
+    }  else if (this.data.currentQuesIndex == this.data.questions.list.length) { // 提交数据
+      this.checkRight()
       this.setData({ loading: true })
       this.postAnswer().then(res => {
         // 更新当日答题限制数据
@@ -129,6 +147,7 @@ Page({
         this.setData({ loading: false })
       })
     } else { // 进入下一题
+      this.checkRight()
       // 重新设置定时器
       this.timer()
       // 定时器设置完毕

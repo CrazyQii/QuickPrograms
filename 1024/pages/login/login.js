@@ -28,12 +28,26 @@ Page({
         })
       })
       .then(data => {
-        // 设置token缓存
-        wx.setStorageSync('answerDetail', data)
-        wx.setStorageSync('token', data.token)
-        wx.reLaunch({
-          url: '/pages/index/index',
-        }) 
+        return new Promise((resolve, reject) => {
+          // 设置token缓存
+          wx.setStorageSync('answerDetail', data)
+          wx.setStorageSync('token', data.token)
+          if (data.status != 0) { // 用户已经注册过，直接进入主界面
+            this.getFullUserInfo()
+            .then((res) => {
+              // 本地存储用户信息
+              wx.setStorageSync('userInfo', res)
+              app.globalData.userInfo = res
+              wx.redirectTo({
+                url: '/pages/index/index',
+              })
+            }).catch(err => {
+              reject(err)
+            })
+          } else {  // 进入注册页面
+            resolve()
+          }
+        })
       })
       .catch(err => {
         wx.showToast({

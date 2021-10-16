@@ -5,29 +5,7 @@ import { getLuckyList } from '../../../utils/apis'
 
 Page({
   data: {
-    'lucky_record': [
-      // {
-      //   'award_id': 1,
-      //   'award_name': '奖品1',
-      //   'luck_date': formatDay(new Date()),
-      //   'draw_type': '普通',
-      //   'status': '未发放'
-      // },
-      // {
-      //   'award_id': 2,
-      //   'award_name': '奖品2',
-      //   'luck_date': formatDay(new Date),
-      //   'draw_type': '普通',
-      //   'status': '未发放'
-      // },
-      // {
-      //   'award_id': -1,
-      //   'award_name': '奖品1',
-      //   'luck_date': formatDay(new Date),
-      //   'draw_type': '普通',
-      //   'status': '未发放'
-      // }
-    ],
+    'lucky_record': [],
     loading: false
   },
 

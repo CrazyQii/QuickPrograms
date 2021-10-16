@@ -89,12 +89,12 @@ Page({
       if (now > endTime) {
         this.setData({ 
           isOpenBigAward: false,
-          noStartAndOverDue: false // 未开始
+          noStartAndOverDue: false // 活动已结束
         })
       } else if (now < startTime) {
         this.setData({ 
           isOpenBigAward: false,
-          noStartAndOverDue: true // 已结束
+          noStartAndOverDue: true // 活动未开始
         })
       }
     }

@@ -3,43 +3,7 @@ Component({
     addGlobalClass: true,
   },
   data: {
-    partPage: [
-      // {
-      //   title: '见龙在田',
-      //   name: '第一关',
-      //   color: 'cyan'
-      // },
-      // {
-      //   title: '飞龙在天',
-      //   name: '第二关',
-      //   color: 'blue'
-      // },
-      // {
-      //   title: '鸿渐于陆',
-      //   name: '第三关',
-      //   color: 'purple'
-      // },
-      // {
-      //   title: '龙跃在渊',
-      //   name: '第四关',
-      //   color: 'mauve'
-      // },
-      // {
-      //   title: '羝羊触藩',
-      //   name: '第五关',
-      //   color: 'pink'
-      // },
-      // {
-      //   title: '潜龙勿用',
-      //   name: '第六关',
-      //   color: 'brown'
-      // },
-      // {
-      //   title: '亢龙有悔',
-      //   name: '第七关',
-      //   color: 'red'
-      // }
-    ],
+    partPage: [],
     index: '',
     modal: false
   },

@@ -11,17 +11,6 @@ Page({
     runDegs: 0, // 旋转角度==生成抽奖概率
     runNum: 8, // 转盘旋转次数
     loading: false,
-    // awardsConfig: { // 获取奖品配置
-    //     chance: true,
-    //     awards:[
-    //       {'index': 0, 'name': '1元红包', 'id': 1},
-    //       {'index': 1, 'name': '5元话费', 'id': 2},
-    //       {'index': 2, 'name': '6元红包', 'id': 3},
-    //       {'index': 3, 'name': '8元红包', 'id': 4},
-    //       {'index': 4, 'name': '10元话费', 'id': 5},
-    //       {'index': 5, 'name': '10元红包', 'id': 6}
-    //     ]
-    // }  
     awardsConfig: {},
     last: ''
   },
@@ -29,8 +18,9 @@ Page({
    * 页面加载，初始化奖盘
    */
   onLoad(option) {
-    this.setData({ last: option.last })
-    if (option.last) { // 最终大奖
+    if (option.lastLottery == 'true') { // 最终大奖
+      console.log(123)
+      this.setData({ last: true })
       this.getLastAwardResult().then(res => {
         wx.setStorageSync('lottery', res)
         this.initPage()
@@ -42,6 +32,7 @@ Page({
         })
       })
     } else {
+      console.log(456)
       this.initPage()
     }
     
@@ -328,7 +319,7 @@ Page({
       'answerId': wx.getStorageSync('lottery')['answerId']
     }
     console.log("展示抽奖结果：" + JSON.stringify(award))
-    this.postAwardResult(award)
+    this.awardResult(award)
     .then(() => {
       let that = this
       // 中奖提示
@@ -369,7 +360,7 @@ Page({
   /**
    * 上传抽奖结果
    */
-  postAwardResult(data) {
+  awardResult(data) {
     console.log("上传抽奖结果")
     return new Promise((resolve, reject) => {
       post(postAwardResult, data).then(res => {
