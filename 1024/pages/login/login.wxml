@@ -1,12 +1,18 @@
 <cu-custom bgColor="bg-gradual-blue">
-  <view slot="content">1024</view>
+  <view slot="content">关卡活动</view>
 </cu-custom>
 
 <!-- 前置页面，请求获取昵称头像权限 -->
 <view class="margin-xl padding-xl bg-cyan light radius shadow shadow-lg ">
+  <view class="flex-sub text-center">
+    <view class="solid-bottom text-xxl padding">
+      <text class="text-brown text-bold">乘风破浪的程序员</text>
+    </view>
+  </view>
   <view class="flex justify-center">
+    
     <view wx:if="{{ !hasOpenUserInfo }}" class="padding flex-direction">
-      <button class="block cu-btn bg-olive lg" bindtap="getOpenUserInfo" disabled="{{ disableBtn }}">微信授权头像昵称</button>
+      <button class="block cu-btn bg-olive lg" bindtap="getOpenUserInfo" disabled="{{ disableBtn }}">授权微信头像昵称</button>
       <view class="text-center margin-top-xl text-red" wx:if="{{ disableBtn }}">
         最新token获取失败，请重新加载小程序
       </view>

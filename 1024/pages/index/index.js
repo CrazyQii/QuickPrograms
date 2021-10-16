@@ -18,61 +18,96 @@ Page({
     last: wx.getStorageSync('last') || false,
     startTime: wx.getStorageSync('answerDetail')['start-time'],
     endTime: wx.getStorageSync('answerDetail')['end-time'],
+    login: false
   },
 
   onLoad(option) {
-    this.setData({ 
-      'loading': true,
-      'last': option['last'] || wx.getStorageSync('last') || false,
-      'startTime': wx.getStorageSync('answerDetail')['start-time'],
-      'endTime': wx.getStorageSync('answerDetail')['end-time'],
-    })
-    this.initPartPage().then(res => { // 初始化关卡
-      res.forEach((item, index) => {
-        item['title'] = '第' + (index + 1) + '关'
-        item['color'] = app.globalData.colorList[index]['name']
+    if (!app.globalData.userInfo) {  // 用户信息不存在
+      this.setData({ 
+        loading: true,
+        login: false
       })
-      this.setData({ partPage: res })
-    }).then((res) => { // 初始化用户等级界面
-      return new Promise((resolve, reject) => {
-        this.initUserPage().then((res) => {
-          resolve(res)
-        }).catch(err => {
-          reject(res)
+      this.initPartPage().then(res => { // 初始化关卡
+        res.forEach((item, index) => {
+          item['title'] = '第' + (index + 1) + '关'
+          item['color'] = app.globalData.colorList[index]['name']
         })
-      })
-    }).then(res => {
-      this.setData({ level: res})
-    }).then(() => { // 加载用户等级
-      return new Promise((resolve, reject) => {
-        this.getUserDegree().then(res => {
-          resolve(res)
-        }).catch(err => {
-          reject(err)
+        this.setData({ partPage: res })
+      }).then((res) => { // 初始化用户等级界面
+        return new Promise((resolve, reject) => {
+          this.initUserPage().then((res) => {
+            resolve(res)
+          }).catch(err => {
+            reject(res)
+          })
         })
+      }).catch(err => {
+        wx.showToast({
+          title: '网络连接超时',
+          icon: 'error',
+          duration: 2000,
+          mask: true
+        })
+        console.error(err)
+      }).finally(() => {
+        this.setData({ loading: false })
       })
-    }).then(res => {
-      this.setData({ userLevel: res})
-    }).then(res => {
-      // 加载缓存
-      this.setData({ loading: true })
-      let itemId = wx.getStorageSync('answerDetail')['itemId']
-      if (itemId == '') itemId = 1 // 默认从第一天开始
-      this.setData({
-        userInfo: wx.getStorageSync('userInfo'),
-        itemId: Number(itemId)
+    } else {
+      this.setData({ 
+        'loading': true,
+        'last': option['last'] || wx.getStorageSync('last') || false,
+        'startTime': wx.getStorageSync('answerDetail')['start-time'],
+        'endTime': wx.getStorageSync('answerDetail')['end-time'],
+        'login': true
       })
-    }).catch(err => {
-      wx.showToast({
-        title: '网络连接超时',
-        icon: 'error',
-        duration: 2000,
-        mask: true
+      this.initPartPage().then(res => { // 初始化关卡
+        res.forEach((item, index) => {
+          item['title'] = '第' + (index + 1) + '关'
+          item['color'] = app.globalData.colorList[index]['name']
+        })
+        this.setData({ partPage: res })
+      }).then((res) => { // 初始化用户等级界面
+        return new Promise((resolve, reject) => {
+          this.initUserPage().then((res) => {
+            resolve(res)
+          }).catch(err => {
+            reject(res)
+          })
+        })
+      }).then(res => {
+        this.setData({ level: res})
+      }).then(() => { // 加载用户等级
+        return new Promise((resolve, reject) => {
+          this.getUserDegree().then(res => {
+            resolve(res)
+          }).catch(err => {
+            reject(err)
+          })
+        })
+      }).then(res => {
+        this.setData({ userLevel: res})
+      }).then(res => {
+        // 加载缓存
+        this.setData({ loading: true })
+        let itemId = wx.getStorageSync('answerDetail')['itemId']
+        if (itemId == '') itemId = 1 // 默认从第一天开始
+        this.setData({
+          userInfo: wx.getStorageSync('userInfo'),
+          itemId: Number(itemId)
+        })
+      }).catch(err => {
+        wx.showToast({
+          title: '网络连接超时',
+          icon: 'error',
+          duration: 2000,
+          mask: true
+        })
+        console.error(err)
+      }).finally(() => {
+        this.setData({ loading: false })
       })
-      console.error(err)
-    }).finally(() => {
-      this.setData({ loading: false })
-    })
+    }
+    
   },
 
   // tab跳转，同时计算当前时间是否可以开奖
@@ -80,6 +115,7 @@ Page({
     this.setData({
       PageCur: e.currentTarget.dataset.cur
     })
+
     let startTime = DateToTs(wx.getStorageSync('answerDetail')['start-time'])
     let endTime = DateToTs(wx.getStorageSync('answerDetail')['end-time'])
     let now = DateToTs(new Date())

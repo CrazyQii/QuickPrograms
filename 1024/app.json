@@ -1,9 +1,9 @@
 {
   "pages": [
+    "pages/index/index",
     "pages/login/login",
     "pages/lottery/answer/answer",
     "pages/about/record/record",
-    "pages/index/index",
     "pages/about/home/home",
     "pages/lottery/result/result",
     "pages/lottery/home/home",

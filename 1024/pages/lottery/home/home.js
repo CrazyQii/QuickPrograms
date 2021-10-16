@@ -18,6 +18,23 @@ Component({
      */
     showModal(e) {
       let couldAnswer = wx.getStorageSync('answerDetail')['couldAnswer']
+      if (couldAnswer == null) { // 引导用户授权信息
+        wx.showToast({
+          title: '未登录',
+          icon: 'error',
+          duration: 1500,
+          mask: true,
+          success: res => {
+            setTimeout(() => {
+              wx.navigateTo({
+                url: '/pages/about/home/home',
+              })
+            }, 1500)
+          }
+        })
+        return
+      }
+
       let index = Number(e.currentTarget.id)
       if (couldAnswer) { // 用户当天没有答题
         if (this.properties.itemId - 1 > index) { // 时间过期，没有弹窗功能
@@ -46,10 +63,7 @@ Component({
             mask: true
           })
         }
-      }
-      
-      
-      
+      }  
     },
     /**
      * 点击确认按钮，关闭弹窗，跳转页面

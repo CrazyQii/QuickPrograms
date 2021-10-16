@@ -1,6 +1,6 @@
 <view class="bg-gray padding-bottom-xl" style=" height: 100%;">
   <lottery wx:if="{{PageCur=='lottery'}}" itemId="{{ itemId }}" partPage="{{ partPage }}"></lottery>
-  <about wx:if="{{PageCur=='about'}}" userInfo="{{userInfo}}" level="{{ level }}" userLevel="{{ userLevel }}" isOpenBigAward="{{ isOpenBigAward }}" noStartAndOverDue="{{ noStartAndOverDue }}" last="{{ last }}" startTime="{{startTime}}" endTime="{{endTime}}"></about>
+  <about wx:if="{{PageCur=='about'}}" userInfo="{{userInfo}}" level="{{ level }}" userLevel="{{ userLevel }}" isOpenBigAward="{{ isOpenBigAward }}" noStartAndOverDue="{{ noStartAndOverDue }}" last="{{ last }}" startTime="{{startTime}}" endTime="{{endTime}}" login="{{login}}"></about>
 
   <view class="cu-bar tabbar bg-white shadow foot">
     <view class="action" bindtap="NavChange" data-cur="lottery">

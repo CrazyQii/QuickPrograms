@@ -94,21 +94,33 @@ Page({
   },
 
   checkRight() {
-    if (this.data.answers[this.data.currentQuesIndex - 1] == this.data.questions.list[this.data.currentQuesIndex - 1]['yes']) {
-      wx.showToast({
-        title: '回答正确',
-        icon: 'success',
-        duration: 1000,
-        mask: true
-      })
-    } else {
-      wx.showToast({
-        title: '回答错误',
-        icon: 'error',
-        duration: 1000,
-        mask: true
-      })
-    }
+    return new Promise((resolve, reject) => {
+      if (this.data.answers[this.data.currentQuesIndex - 1] == this.data.questions.list[this.data.currentQuesIndex - 1]['yes']) {
+        wx.showToast({
+          title: '回答正确',
+          icon: 'success',
+          duration: 1000,
+          mask: true,
+          success: res => {
+            setTimeout(() => {
+              resolve()
+            }, 1000)
+          }
+        })
+      } else {
+        wx.showToast({
+          title: '回答错误',
+          icon: 'error',
+          duration: 1000,
+          mask: true,
+          success: res => {
+            setTimeout(() => {
+              resolve()
+            }, 1000)
+          }
+        })
+      }
+    })
   },
 
   /**
@@ -120,40 +132,42 @@ Page({
     if (this.data.answers.length != this.data.currentQuesIndex) { // 未选择
       this.setData({ btnShake: true })
     }  else if (this.data.currentQuesIndex == this.data.questions.list.length) { // 提交数据
-      this.checkRight()
-      this.setData({ loading: true })
-      this.postAnswer().then(res => {
-        // 更新当日答题限制数据
-        let answerDetail = wx.getStorageSync('answerDetail')
-        answerDetail['couldAnswer'] = res['couldAnswer'] // 判断今日是否已经答题
-        answerDetail['itemId'] = res['itemId'] + 1 // 本地自动更新答题编号
-        wx.setStorageSync('answerDetail', answerDetail)
+      this.checkRight().then(() => {
+        this.setData({ loading: true })
+        this.postAnswer().then(res => {
+          // 更新当日答题限制数据
+          let answerDetail = wx.getStorageSync('answerDetail')
+          answerDetail['couldAnswer'] = res['couldAnswer'] // 判断今日是否已经答题
+          answerDetail['itemId'] = res['itemId'] + 1 // 本地自动更新答题编号
+          wx.setStorageSync('answerDetail', answerDetail)
 
-        //  是否符合参加抽奖资格
-        wx.setStorageSync('lottery', res)
-        wx.redirectTo({
-          url: '/pages/lottery/result/result',
+          //  是否符合参加抽奖资格
+          wx.setStorageSync('lottery', res)
+          wx.redirectTo({
+            url: '/pages/lottery/result/result',
+          })
+        }).catch(err => {
+          wx.showToast({
+            title: '网络连接超时',
+            icon: 'error',
+            duration: 2000,
+            mask: true
+          })
+          console.error(err)
+        }).finally(() => {
+          // 提交成功，跳转结果展示页面
+          this.setData({ loading: false })
         })
-      }).catch(err => {
-        wx.showToast({
-          title: '网络连接超时',
-          icon: 'error',
-          duration: 2000,
-          mask: true
-        })
-        console.error(err)
-      }).finally(() => {
-        // 提交成功，跳转结果展示页面
-        this.setData({ loading: false })
       })
     } else { // 进入下一题
-      this.checkRight()
-      // 重新设置定时器
-      this.timer()
-      // 定时器设置完毕
-      this.setData({
-        btnShake: false,
-        currentQuesIndex: this.data.currentQuesIndex + 1
+      this.checkRight().then(() => {
+        // 重新设置定时器
+        this.timer()
+        // 定时器设置完毕
+        this.setData({
+          btnShake: false,
+          currentQuesIndex: this.data.currentQuesIndex + 1
+        })
       })
     }
   },

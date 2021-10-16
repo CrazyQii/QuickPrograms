@@ -1,5 +1,5 @@
 <cu-custom bgColor="bg-gradual-blue">
-  <view slot="content">1024</view>
+  <view slot="content">关卡活动</view>
 </cu-custom>
 
 <!-- 主页面 -->

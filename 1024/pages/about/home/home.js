@@ -12,7 +12,8 @@ Component({
     noStartAndOverDue: Boolean,
     last: Boolean,
     startTime: String,
-    endTime: String
+    endTime: String,
+    login: Boolean
   },
   data: {
     level: []
