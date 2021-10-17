@@ -12,6 +12,8 @@ const postOpenUserInfo = '/api/user/putWechat'
 const getLuckyList = '/api/lucky/list'
 const getUserCredit = '/api/credit/info'
 const getLevelList = '/api/level/list'
+const getUserStatus = '/api/user/partStatus'
+const getTimeStatus = '/api/user/timeStatus'
 
 
 // 抽奖模块
@@ -24,6 +26,8 @@ module.exports = {
     postNewUserInfo,
     getUserInfo,
     postOpenUserInfo,
+    getUserStatus,
+    getTimeStatus,
     partList,
     quizList,
     putResult,

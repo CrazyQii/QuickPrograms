@@ -1,5 +1,5 @@
-import { post } from '../../utils/request'
-import { partList, getUserCredit, getLevelList } from '../../utils/apis'
+import { post, get } from '../../utils/request'
+import { partList, getUserCredit, getLevelList, getUserStatus, getTimeStatus } from '../../utils/apis'
 import { DateToTs } from '../../utils/util'
 
 const app = getApp()
@@ -11,18 +11,19 @@ Page({
     userInfo: {},
     level: [],
     userLevel: {},
-    itemId: '',
     loading: false,
     isOpenBigAward: false,
     noStartAndOverDue: false,
     last: wx.getStorageSync('last') || false,
     startTime: wx.getStorageSync('answerDetail')['start-time'],
     endTime: wx.getStorageSync('answerDetail')['end-time'],
-    login: false
+    login: false,
+    itemId: wx.getStorageSync('answerDetail')['itemId'],
+    couldAnswer: wx.getStorageSync('answerDetail')['couldAnswer']
   },
 
   onLoad(option) {
-    if (!app.globalData.userInfo) {  // 用户信息不存在
+    if (!wx.getStorageSync('token')) {  // 用户信息不存在
       this.setData({ 
         loading: true,
         login: false
@@ -87,6 +88,22 @@ Page({
       }).then(res => {
         this.setData({ userLevel: res})
       }).then(res => {
+        this.getStatus().then(data => {
+          return new Promise((resolve, reject) => {
+            let answerDetail = wx.getStorageSync('answerDetail')
+            answerDetail['couldAnswer'] = data.couldAnswer
+            answerDetail['itemId'] = data.itemId
+            wx.setStorageSync('answerDetail', answerDetail)
+            this.setData({ 
+              itemId:data.itemId,
+              couldAnswer: data.couldAnswer
+            })
+            resolve()
+          })
+        }).catch(err => {
+          reject(err)
+        })
+      }).then(res => {
         // 加载缓存
         this.setData({ loading: true })
         let itemId = wx.getStorageSync('answerDetail')['itemId']
@@ -106,8 +123,7 @@ Page({
       }).finally(() => {
         this.setData({ loading: false })
       })
-    }
-    
+    }  
   },
 
   // tab跳转，同时计算当前时间是否可以开奖
@@ -115,7 +131,49 @@ Page({
     this.setData({
       PageCur: e.currentTarget.dataset.cur
     })
+    // 判断用户之前是否登录过，更新用户做题状态
+    if (wx.getStorageSync('token') && this.data.PageCur == 'lottery') {
+      this.setData({ loading: true })
+      this.getStatus().then(data => {
+        return new Promise((resolve, reject) => {
+          let answerDetail = wx.getStorageSync('answerDetail')
+          answerDetail['couldAnswer'] = data.couldAnswer
+          answerDetail['itemId'] = data.itemId
+          wx.setStorageSync('answerDetail', answerDetail)
+          this.setData({ 
+            itemId:data.itemId,
+            couldAnswer: data.couldAnswer
+          })
+          resolve()
+        })
+      }).catch(err => {
+        console.error(err)
+      }).finally(() => {
+        this.setData({ loading: false})
+      })
+    }
+    if (wx.getStorageSync('token') && this.data.PageCur == 'about') {
+      this.setData({ 
+        loading: true,
+        last: wx.getStorageSync('last')
+      })
+      this.getOpenTime().then(res => {
+        let answerDetail = wx.getStorageSync('answerDetail')
+        answerDetail['start-time'] = res['start-time']
+        answerDetail['end-time'] = res['end-time']
+        wx.setStorageSync('answerDetail', answerDetail)
+        this.setData({
+          startTime: answerDetail['start-time'],
+          endTime: answerDetail['end-time']
+        })
+      }).catch(err => {
+        console.error(err)
+      }).finally(() => {
+        this.setData({ loading: false })
+      })
+    }
 
+    // 大奖时间参数设置
     let startTime = DateToTs(wx.getStorageSync('answerDetail')['start-time'])
     let endTime = DateToTs(wx.getStorageSync('answerDetail')['end-time'])
     let now = DateToTs(new Date())
@@ -190,6 +248,44 @@ Page({
       })
     }).catch(err => {
       console.log("查询用户当前级别失败" + JSON.stringify(err))
+    })
+  },
+
+  /**
+   * 获取Status
+   */
+  getStatus() {
+    console.log("开始获取答题关卡Status")
+    return new Promise((resolve, reject) => {
+      post(getUserStatus).then(res => {
+        if (res.retno == 0) {
+          console.log("获取答题关卡状态结果：" + JSON.stringify(res.data))
+          resolve(res.data)
+        } else {
+          reject(res)
+        }
+      }).catch(err => {
+        reject("获取答题关卡状态失败：" + JSON.stringify(err))
+      })
+    })
+  },
+
+  /**
+   * 获取大奖更新时间
+   */
+  getOpenTime() {
+    console.log("开始获取开奖时间Status")
+    return new Promise((resolve, reject) => {
+      post(getTimeStatus).then(res => {
+        if (res.retno == 0) {
+          console.log("获取开奖时间状态结果：" + JSON.stringify(res.data))
+          resolve(res.data)
+        } else {
+          reject(res)
+        }
+      }).catch(err => {
+        reject("获取开奖时间状态失败：" + JSON.stringify(err))
+      })
     })
   }
 })

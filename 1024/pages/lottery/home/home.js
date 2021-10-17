@@ -9,7 +9,8 @@ Component({
   },
   properties: {
     'itemId': Number,
-    'partPage': Array
+    'partPage': Array,
+    'couldAnswer': Boolean
   },
   methods: {
     /**
@@ -17,8 +18,9 @@ Component({
      * @param {*} e 
      */
     showModal(e) {
-      let couldAnswer = wx.getStorageSync('answerDetail')['couldAnswer']
-      if (couldAnswer == null) { // 引导用户授权信息
+      let couldAnswer = this.properties.couldAnswer
+      let token = wx.getStorageSync('token')
+      if (token == null || token == '') { // 引导用户授权信息
         wx.showToast({
           title: '未登录',
           icon: 'error',
@@ -34,12 +36,12 @@ Component({
         })
         return
       }
-
+      
       let index = Number(e.currentTarget.id)
-      if (couldAnswer) { // 用户当天没有答题
-        if (this.properties.itemId - 1 > index) { // 时间过期，没有弹窗功能
+      if (couldAnswer) { // 用户可以答题
+        if (index + 1 < this.properties.itemId) { // 时间过期，没有弹窗功能
           return 
-        } else if (this.properties.itemId - 1 == index) { // 当天题库
+        } else if (this.properties.itemId == index + 1) { // 当天题库
           this.setData({
             modal: true,
             index: index
@@ -53,7 +55,7 @@ Component({
           })
         }
       } else { // 用户当天已经答过题目
-        if (this.properties.itemId - 1 > index) { // 时间过期，没有弹窗功能
+        if (index + 1 <= this.properties.itemId) { // 时间过期，没有弹窗功能
           return 
         } else { // 时间未到，不开放题目
           wx.showToast({

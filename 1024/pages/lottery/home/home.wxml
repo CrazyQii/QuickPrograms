@@ -3,8 +3,14 @@
 </cu-custom>
 
 <!-- 主页面 -->
-<view class='nav-list margin-top-xl'>
-  <view hover-class='none' class="nav-li {{ itemId - 1 <= index? 'bg-'+item.color: 'bg-grey' }}" wx:for="{{partPage}}" wx:key="index" bindtap="showModal" id="{{ index }}">
+<view class='nav-list margin-top-xl' wx:if="{{ couldAnswer }}">
+  <view hover-class='none' class="nav-li {{ index + 1 < itemId ? 'bg-grey':'bg-'+item.color }}" wx:for="{{partPage}}" wx:key="index" bindtap="showModal" id="{{ index }}">
+    <view class="nav-title">{{item.title}}</view>
+    <view class="nav-name">{{item.name}}</view>
+  </view>
+</view>
+<view class='nav-list margin-top-xl' wx:else>
+  <view hover-class='none' class="nav-li {{ index + 1 <= itemId? 'bg-grey': 'bg-'+item.color }}" wx:for="{{partPage}}" wx:key="index" bindtap="showModal" id="{{ index }}">
     <view class="nav-title">{{item.title}}</view>
     <view class="nav-name">{{item.name}}</view>
   </view>

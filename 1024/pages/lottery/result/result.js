@@ -24,7 +24,7 @@ Page({
    * 跳转首页
    */
   toIndex() {
-    wx.redirectTo({
+    wx.reLaunch({
       url: '/pages/index/index',
     })
   }

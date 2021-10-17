@@ -12,7 +12,7 @@
         <view class="cu-tag bg-cyan radius">奖品</view>
         <view class="flex">
           <view class="margin-top flex-sub padding-right">{{ item.awardName }}</view>
-          <view class="flex-sub"style="background-image: url('{{ item.photoUrl }}'); height: 200rpx; width: 200rpx;" ></view>
+          <view class="flex-sub bg-img"style="background-image: url('{{ item.photoUrl }}');  height: 200rpx; width: 200rpx;" ></view>
         </view>
       </view>
     </view>

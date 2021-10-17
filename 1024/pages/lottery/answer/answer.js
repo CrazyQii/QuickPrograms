@@ -22,30 +22,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(option) {
-    // this.setData({
-    //   questions: {
-    //     'list': [
-    //       {
-    //         'content': '213',
-    //         'opta': 'a',
-    //         'optb': 'b',
-    //         'optc': 'c',
-    //         'optd': 'd',
-    //         'yes': 2
-    //       },
-    //       {
-    //         'content': '213',
-    //         'opta': 'a',
-    //         'optb': 'b',
-    //         'optc': 'c',
-    //         'optd': 'd',
-    //         'yes': 2
-    //       }
-    //     ]
-    //   }
-    // })
-    // this.timer() // 开启定时器
-    
     this.setData({ loading: true })
     this.getQuestions(option.itemId)
     .then(res => {
@@ -103,6 +79,7 @@ Page({
           mask: true,
           success: res => {
             setTimeout(() => {
+              this.setData({ checked: '' })
               resolve()
             }, 1000)
           }
@@ -113,13 +90,16 @@ Page({
           icon: 'error',
           duration: 1000,
           mask: true,
+          image: '/images/error.png',
           success: res => {
             setTimeout(() => {
+              this.setData({ checked: '' })
               resolve()
             }, 1000)
           }
         })
       }
+      
     })
   },
 
@@ -127,7 +107,6 @@ Page({
    * 切换题目显示
    */
   nextQues() {
-    this.setData({ checked: '' })
     // 校验当前题目是否选择单选框
     if (this.data.answers.length != this.data.currentQuesIndex) { // 未选择
       this.setData({ btnShake: true })
@@ -135,12 +114,6 @@ Page({
       this.checkRight().then(() => {
         this.setData({ loading: true })
         this.postAnswer().then(res => {
-          // 更新当日答题限制数据
-          let answerDetail = wx.getStorageSync('answerDetail')
-          answerDetail['couldAnswer'] = res['couldAnswer'] // 判断今日是否已经答题
-          answerDetail['itemId'] = res['itemId'] + 1 // 本地自动更新答题编号
-          wx.setStorageSync('answerDetail', answerDetail)
-
           //  是否符合参加抽奖资格
           wx.setStorageSync('lottery', res)
           wx.redirectTo({

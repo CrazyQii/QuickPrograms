@@ -18,6 +18,7 @@ Page({
    * 页面加载，初始化奖盘
    */
   onLoad(option) {
+    this.setData({ lastLottery: option.lastLottery })
     if (option.lastLottery == 'true') { // 最终大奖
       console.log(123)
       this.setData({ last: true })
@@ -27,8 +28,8 @@ Page({
       }).catch(err => {
         wx.setStorageSync('last', true) // 本地记录是否抽过大奖
         console.error("大奖抽奖接口结果：" + JSON.stringify(err))
-        wx.redirectTo({
-          url: '/pages/index/index?last=' + true
+        wx.reLaunch({
+          url: '/pages/index/index?last=' + this.data.last
         })
       })
     } else {
