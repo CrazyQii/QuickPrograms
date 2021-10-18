@@ -18,7 +18,7 @@
       </view>
     </view>
     <block wx:else> 
-      <view class='text-center'>
+      <view class='text-center margin-top-xl'>
         <view class="cu-avatar xl round solids" style="background-image:url({{userInfo.avatar}})"></view>
         <view class="padding">{{userInfo.nickname}}</view>
       </view>
@@ -28,7 +28,7 @@
 
 <!-- 联系人信息注册页面 -->
 <form  wx:if="{{ hasOpenUserInfo }}" bindsubmit="register">
-  <view class="solids-bottom padding-xs flex align-center">
+  <view class="padding-xs flex align-center">
     <view class="flex-sub text-center">
       <view class="solid-top text-lg padding">
         <text class="text-black">领奖联系人登记</text>

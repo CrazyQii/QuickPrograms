@@ -9,7 +9,7 @@ Component({
     level: Array,
     userLevel: Object,
     isOpenBigAward: Boolean,
-    noStartAndOverDue: Boolean,
+    isOver: Boolean,
     last: Boolean,
     startTime: String,
     endTime: String,

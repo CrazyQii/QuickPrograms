@@ -61,7 +61,8 @@ App({
   },
   globalData: {
     userInfo: null,
-    host: 'https://www.crazyqiqi.top', // 服务器
+    // host: 'https://www.crazyqiqi.top', // 服务器
+    host: 'http://139.9.85.41:9090/', // 测试服务器
     colorList: [{
       title: '嫣红',
       name: 'red',

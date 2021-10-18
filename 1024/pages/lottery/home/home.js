@@ -75,7 +75,7 @@ Component({
         modal: false,
         index: ''
       })
-      wx.redirectTo({
+      wx.navigateTo({
         url: '/pages/lottery/answer/answer?itemId=' + this.properties.itemId,
       })
     },

@@ -63,6 +63,9 @@ Page({
         this.setData({ loading: false })
       })
     } else { // 信息不存在，注册用户信息 
+      if (wx.getStorageSync('answerDetail')['status'] == 0) {
+        return
+      }
       this.setData({ loading: true })
       this.login()
       .then(res => {
@@ -185,6 +188,13 @@ Page({
         if (this.userInfoReadyCallback) {
           this.userInfoReadyCallback(res)
         }
+      }, fail: e => {
+        wx.showToast({
+          title: '请授权操作',
+          icon: 'error',
+          duration: 2000,
+          mask: true
+        })
       }
     })
   },

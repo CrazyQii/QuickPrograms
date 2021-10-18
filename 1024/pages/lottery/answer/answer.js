@@ -38,7 +38,7 @@ Page({
       })
       console.error(err)
       setTimeout(() => {
-        wx.redirectT({
+        wx.reLaunch({
           url: '/pages/index/index',
         })
       }, 2000)
