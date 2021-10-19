@@ -47,6 +47,10 @@ Page({
     })
   },
 
+  onUnload() {
+    clearInterval(this.data.count)
+  },
+
   /**
    * 查询题目列表
    */

@@ -21,7 +21,8 @@ Page({
   },
 
   onLoad(option) {
-    if (!wx.getStorageSync('token')) {  // 用户信息不存在
+    console.log('000' + JSON.stringify(option))
+    if (!wx.getStorageSync('token')) {  // 用户信息不存在，单独加载展示页面
       this.setData({ 
         loading: true,
         login: false
@@ -37,7 +38,7 @@ Page({
           this.initUserPage().then((res) => {
             resolve(res)
           }).catch(err => {
-            reject(res)
+            reject(err)
           })
         })
       }).catch(err => {
@@ -52,28 +53,31 @@ Page({
         this.setData({ loading: false })
       })
     } else { 
-      if (wx.getStorageSync('answerDetail')['status'] == 0) {
-        wx.navigateTo({
-          url: '/pages/login/login',
-        })
-        return 
-      }
+      // if (wx.getStorageSync('answerDetail')['status'] == 0) {
+      //   wx.navigateTo({
+      //     url: '/pages/login/login',
+      //   })
+      //   return 
+      // }
 
-      this.login()
-      .then(res => {
-        return new Promise((resolve, reject) => {
-          this.getToken(res).then(res => {
-            resolve(res)
-          }).catch(err => {
-            reject(err)
-          })
-        })
-      }).then(data => {
-        wx.setStorageSync('answerDetail', data)
-        wx.setStorageSync('token', data.token)
-      }).catch(err => {
-        console.error(err)
-      })
+
+      // if (typeof(option) option['login'] != 'true') {
+      //   this.login()
+      //   .then(res => {
+      //     return new Promise((resolve, reject) => {
+      //       this.getToken(res).then(res => {
+      //         resolve(res)
+      //       }).catch(err => {
+      //         reject(err)
+      //       })
+      //     })
+      //   }).then(data => {
+      //     wx.setStorageSync('answerDetail', data)
+      //     wx.setStorageSync('token', data.token)
+      //   }).catch(err => {
+      //     console.error(err)
+      //   })
+      // }
 
       this.setData({ 
         'loading': true,
@@ -151,12 +155,32 @@ Page({
   },
 
   onShow() {
-    this.onLoad()
+    // console.log('213' + JSON.stringify())
+    // if (typeof(option) != undefined) { // 从登录页跳转过来不需要执行
+    //   return 
+    // }
+    // console.log(123)
+    this.login()
+      .then(res => {
+        return new Promise((resolve, reject) => {
+          this.getToken(res).then(res => {
+            resolve(res)
+          }).catch(err => {
+            reject(err)
+          })
+        })
+      }).then(data => {
+        wx.setStorageSync('answerDetail', data)
+        wx.setStorageSync('token', data.token)
+      }).catch(err => {
+        console.error(err)
+      })
+  //   this.onLoad()
   },
 
-  onHide() {
-    this.onLoad()
-  },
+  // onHide() {
+  //   this.onLoad()
+  // },
 
   // tab跳转，同时计算当前时间是否可以开奖
   NavChange(e) {
@@ -166,6 +190,7 @@ Page({
     if (wx.getStorageSync('answerDetail')['status'] == 0) return
     // 判断用户之前是否登录过，更新用户做题状态
     if (wx.getStorageSync('token') && this.data.PageCur == 'lottery') {
+      this.onShow()
       this.setData({ loading: true })
       this.getStatus().then(data => {
         return new Promise((resolve, reject) => {

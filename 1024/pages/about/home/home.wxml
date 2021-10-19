@@ -3,7 +3,7 @@
   <image src="{{ userInfo.avatar }}" class="png round" mode="widthFix"></image>
   <view class="text-xl margin-top">{{ userInfo.nickname }}</view>
   <view class="padding flex flex-direction" wx:if="{{ !login }}">
-    <navigator class="margin-top cu-btn bg-blue lg" open-type="navigate" url="/pages/login/login">授权登录</navigator>
+    <navigator class="margin-top cu-btn bg-blue lg round" open-type="navigate" url="/pages/login/login">授权登录</navigator>
   </view>
   <image src="/images/wave.gif" mode="scaleToFill" class="gif-wave"></image>
 </view>

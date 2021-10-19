@@ -11,6 +11,7 @@ const request = (url, options, header) => {
       //如果是GET,GET自动让数据成为query String,其他方法需要让options.data转化为字符串
       header: {
         'Content-Type': options.header,
+        'LOGIN-USER-KEY': wx.getStorageSync('userInfo')['id'],
         'X-LCSCHOOL-TOKEN': wx.getStorageSync('token') // 后台接口凭证         
       },
       //header中可以监听到token值的变化

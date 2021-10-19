@@ -20,7 +20,7 @@ Component({
     showModal(e) {
       let couldAnswer = this.properties.couldAnswer
       let token = wx.getStorageSync('token')
-      if (token == null || token == '') { // 引导用户授权信息
+      if (token == null || token == '' || wx.getStorageSync('answerDetail')['status'] == 0) { // 引导用户授权信息
         wx.showToast({
           title: '未登录',
           icon: 'error',
@@ -28,7 +28,7 @@ Component({
           mask: true,
           success: res => {
             setTimeout(() => {
-              wx.navigateTo({
+              wx.redirectTo({
                 url: '/pages/about/home/home',
               })
             }, 1500)

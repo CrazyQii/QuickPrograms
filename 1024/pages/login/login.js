@@ -38,8 +38,8 @@ Page({
               // 本地存储用户信息
               wx.setStorageSync('userInfo', res)
               app.globalData.userInfo = res
-              wx.redirectTo({
-                url: '/pages/index/index',
+              wx.reLaunch({
+                url: '/pages/index/index?login=true',
               })
             }).catch(err => {
               reject(err)
@@ -62,10 +62,10 @@ Page({
       .finally(() => {
         this.setData({ loading: false })
       })
+    } else  
+    if (wx.getStorageSync('answerDetail')['status'] == 0) { // 登陆过，但是没有注册完整信息
+      return
     } else { // 信息不存在，注册用户信息 
-      if (wx.getStorageSync('answerDetail')['status'] == 0) {
-        return
-      }
       this.setData({ loading: true })
       this.login()
       .then(res => {
@@ -88,7 +88,7 @@ Page({
               wx.setStorageSync('userInfo', res)
               app.globalData.userInfo = res
               wx.redirectTo({
-                url: '/pages/index/index',
+                url: '/pages/index/index?login=true',
               })
             }).catch(err => {
               reject(err)
