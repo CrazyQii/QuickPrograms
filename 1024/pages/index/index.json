@@ -1,6 +1,0 @@
-{
-  "usingComponents": {
-    "lottery": "/pages/lottery/home/home",
-    "about": "/pages/about/home/home"
-  }
-}

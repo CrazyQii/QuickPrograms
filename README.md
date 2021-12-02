@@ -6,7 +6,5 @@
 
 [2. 邮件系统 EmailSystem](https://github.com/CrazyQii/QuickPrograms/tree/master/EmailSystem)
 
-[3.1024 抽奖小程序（前端）](https://github.com/CrazyQii/QuickPrograms/tree/master/1024)
-
 
 
