@@ -1,15 +1,22 @@
 package com.hlq.account.service.impl;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableMap;
 import com.hlq.account.entity.User;
+import com.hlq.account.enums.ErrorCode;
 import com.hlq.account.enums.Role;
+import com.hlq.account.exception.BaseException;
 import com.hlq.account.mapper.UserMapper;
 import com.hlq.account.service.UserService;
 import com.hlq.account.vo.UserVo;
 import javafx.beans.property.adapter.JavaBeanBooleanProperty;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
-import java.util.Date;
+import java.util.*;
 
 /**
  * @program: UserServiceImpl
@@ -18,6 +25,7 @@ import java.util.Date;
  * @create: 2021-12-14 17:28
  **/
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -25,7 +33,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(UserVo userVo) {
-        validUserName(userVo.getUserName());
+        try {
+//            validUserName(userVo.getUserName());
+            throw new Exception("异常");
+        } catch (Exception e) {
+            log.error(e.toString());
+        }
         // 1.
         // 创建新的用户
 //        Date date = new Date();
@@ -44,6 +57,8 @@ public class UserServiceImpl implements UserService {
      */
     private void validUserName(String username) {
         User user = userMapper.findUserByUsername(username);
-        System.out.println(user);
+        if (!ObjectUtils.isEmpty(user)) {
+            throw new BaseException(ErrorCode.USER_NAME_ALREADY_EXIST, ImmutableMap.of("userName", username));
+        }
     }
 }

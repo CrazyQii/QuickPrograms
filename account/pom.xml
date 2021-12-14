@@ -16,7 +16,7 @@
     <properties>
         <java.version>1.8</java.version>
         <jwt.version>0.10.7</jwt.version>
-
+        <guava.version>29.0-jre</guava.version>
     </properties>
     <dependencies>
         <dependency>
@@ -28,7 +28,7 @@
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>2.2.0</version>
         </dependency>
-
+        <!--   数据库     -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -67,7 +67,12 @@
             <version>${jwt.version}</version>
             <scope>runtime</scope>
         </dependency>
-
+        <!-- guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
