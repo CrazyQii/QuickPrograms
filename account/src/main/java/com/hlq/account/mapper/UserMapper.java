@@ -22,6 +22,7 @@ public interface UserMapper {
      */
     @Select("SELECT * FROM tb_user WHERE id = #{id}")
     @Results({
+            @Result(property = "userName", column = "user_name"),
             @Result(property = "nickName", column = "nick_name"),
             @Result(property = "openId", column = "open_id"),
             @Result(property = "sessionKey", column = "session_key"),
@@ -31,22 +32,6 @@ public interface UserMapper {
             @Result(property = "role", column = "role")
     })
     User findUserById(Long id);
-
-    /**
-     * 插入用户
-     * @param user 用户对象
-     */
-    @Insert("INSERT INTO tb_user(nick_name, pass_word, open_id, session_key, avatar, register_time, last_login_time, role) " +
-            "VALUE(#{nickName}, #{passWord}, #{openId}, #{sessionKey}, #{avatar}, #{registerTime}, #{lastLoginTime}, #{role})")
-    void insertUser(User user);
-
-    /**
-     * 更新用户
-     * @param user 用户对象
-     */
-    @Update("UPDATE tb_user SET nick_name=#{nickName}, open_id=#{openId}, session_key=#{sessionKey}, " +
-            "avatar=#{avatar}, last_login_time=#{lastLoginTime}, role=#{role} WHERE id=#{id}")
-    void updateUser(User user);
 
     /**
      * 通过token查找用户
@@ -61,6 +46,42 @@ public interface UserMapper {
                     one = @One(select = "com.hlq.account.mapper.UserMapper.findUserById", fetchType = FetchType.LAZY))
     })
     UserToken findUserByToken(String token);
+
+
+    /**
+     * 通过Id查找用户
+     * @param username username
+     * @return 用户对象
+     */
+    @Select("SELECT * FROM tb_user WHERE user_name = #{userName}")
+    @Results({
+            @Result(property = "userName", column = "user_name"),
+            @Result(property = "nickName", column = "nick_name"),
+            @Result(property = "openId", column = "open_id"),
+            @Result(property = "sessionKey", column = "session_key"),
+            @Result(property = "avatar", column = "avatar"),
+            @Result(property = "registerTime", column = "register_time"),
+            @Result(property = "lastLoginTime", column = "last_login_time"),
+            @Result(property = "role", column = "role")
+    })
+    User findUserByUsername(String username);
+
+    /**
+     * 插入用户
+     * @param user 用户对象
+     */
+    @Insert("INSERT INTO tb_user(user_name, nick_name, pass_word, open_id, session_key, avatar, register_time, last_login_time, role) " +
+            "VALUE(#{userName}, #{nickName}, #{passWord}, #{openId}, #{sessionKey}, #{avatar}, #{registerTime}, #{lastLoginTime}, #{role})")
+    void insertUser(User user);
+
+    /**
+     * 更新用户
+     * @param user 用户对象
+     */
+    @Update("UPDATE tb_user SET user_name=#{userName}, nick_name=#{nickName}, open_id=#{openId}, session_key=#{sessionKey}, " +
+            "avatar=#{avatar}, last_login_time=#{lastLoginTime}, role=#{role} WHERE id=#{id}")
+    void updateUser(User user);
+
 
     /**
      * 插入用户token

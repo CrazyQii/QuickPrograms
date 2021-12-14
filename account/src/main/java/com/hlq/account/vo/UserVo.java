@@ -1,18 +1,17 @@
-package com.hlq.account.entity;
+package com.hlq.account.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
+import lombok.Data;
 
 import java.util.Date;
 
 /**
- * @Program: User
- * @Description: 用户
- * @Author: HanLinqi
- * @Date: 2021/12/13 00:20:17
- */
+ * @program: UserVo
+ * @description: 用户Vo对象
+ * @author: hanLinQi
+ * @create: 2021-12-14 18:51
+ **/
 @Data
-public class User {
+public class UserVo {
     private Long id;
     private String userName;
     private String nickName;
@@ -20,10 +19,9 @@ public class User {
     private String openId;
     private String sessionKey;
     private String avatar;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date registerTime;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastLoginTime;
     private String role;
-
+    private String userId;
+    private String token;
 }

@@ -5,7 +5,7 @@ package com.hlq.account.enums;
  * @author: hanLinQi
  * @create: 2021-12-14 11:29
  **/
-public enum RoleEnum {
+public enum Role {
     /**
      * 管理员
      */
@@ -18,7 +18,7 @@ public enum RoleEnum {
     private final String value;
     private final String message;
 
-    RoleEnum(String value, String message) {
+    Role(String value, String message) {
         this.value = value;
         this.message = message;
     }

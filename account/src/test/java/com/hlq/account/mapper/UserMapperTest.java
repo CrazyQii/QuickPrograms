@@ -2,14 +2,12 @@ package com.hlq.account.mapper;
 
 import com.hlq.account.entity.User;
 import com.hlq.account.entity.UserToken;
-import com.hlq.account.enums.RoleEnum;
+import com.hlq.account.enums.Role;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Date;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class UserMapperTest {
@@ -30,7 +28,7 @@ class UserMapperTest {
     void updateUser() {
         Date date = new Date();
         User user = userMapper.findUserById(1L);
-        user.setRole(RoleEnum.ADMIN.getValue());
+        user.setRole(Role.ADMIN.getValue());
         user.setLastLoginTime(date);
         userMapper.updateUser(user);
     }
