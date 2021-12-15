@@ -1,4 +1,4 @@
-package com.hlq.account.exception;
+package com.hlq.account.common.utils;
 
 import com.hlq.account.common.utils.Response;
 import com.hlq.account.enums.ResultCode;

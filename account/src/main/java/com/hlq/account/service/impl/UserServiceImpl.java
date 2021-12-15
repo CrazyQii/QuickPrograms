@@ -1,6 +1,7 @@
 package com.hlq.account.service.impl;
 
 import com.google.common.collect.ImmutableMap;
+import com.hlq.account.dto.LoginDto;
 import com.hlq.account.entity.User;
 import com.hlq.account.enums.ResultCode;
 import com.hlq.account.enums.Role;
@@ -13,9 +14,11 @@ import com.hlq.account.vo.UserVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import javax.security.auth.login.CredentialException;
 import java.util.Date;
 
 /**
@@ -31,6 +34,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
     /**
      * 错误信息提示
      */
@@ -51,6 +55,7 @@ public class UserServiceImpl implements UserService {
         try {
             user = new User();
             // 创建新的用户
+            userVo.setPassWord(bCryptPasswordEncoder.encode(userVo.getPassWord()));
             userVo.setRole(Role.USER.getValue());
             userVo.setRegisterTime(date);
             userVo.setLastLoginTime(date);
@@ -70,4 +75,24 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(user, userVo);
     }
 
+    @Override
+    public String createToken(LoginDto loginDto) {
+        User user = userMapper.findUserByUsername(loginDto.getUserName());
+        if (ObjectUtils.isEmpty(user)) {
+            throw new UserNameNotFoundException(ImmutableMap.of(USERNAME, loginDto.getUserName()));
+        }
+        if (!this.check(loginDto.getPassWord(), user.getPassWord())) {
+            throw new CredentialException("密码不正确");
+        }
+    }
+
+    /**
+     * 校验密码
+     * @param currentPassWord 当前密码
+     * @param password 数据库密码
+     * @return 正误结果
+     */
+    public boolean check(String currentPassWord, String password) {
+        return this.bCryptPasswordEncoder.matches(currentPassWord, password);
+    }
 }

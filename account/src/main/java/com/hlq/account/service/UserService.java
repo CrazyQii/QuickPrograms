@@ -1,5 +1,6 @@
 package com.hlq.account.service;
 
+import com.hlq.account.dto.LoginDto;
 import com.hlq.account.vo.UserVo;
 
 /**
@@ -20,4 +21,11 @@ public interface UserService {
      * @param userVo 用户名
      */
     void find(UserVo userVo);
+
+    /**
+     * 生成token
+     * @param loginDto 登录对象
+     * @return token
+     */
+    String createToken(LoginDto loginDto);
 }

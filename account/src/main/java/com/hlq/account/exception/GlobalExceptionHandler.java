@@ -1,5 +1,6 @@
 package com.hlq.account.exception;
 
+import com.hlq.account.common.utils.ErrorResponse;
 import com.hlq.account.exception.user.UserNameAlreadyException;
 import com.hlq.account.exception.user.UserNameNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +39,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse<Void>> handleUserNameNotFoundException(
             UserNameNotFoundException ex, HttpServletRequest request) {
         ErrorResponse<Void> errorResponse = new ErrorResponse<Void>(ex, request.getRequestURI());
-        log.error("该用户不存在：{}", errorResponse);
+        log.error("用户名不存在：{}", errorResponse);
         return ResponseEntity.status(ex.getErrorCode().getStatus()).body(errorResponse);
     }
 
