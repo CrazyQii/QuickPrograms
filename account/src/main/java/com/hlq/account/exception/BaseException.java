@@ -1,6 +1,6 @@
 package com.hlq.account.exception;
 
-import com.hlq.account.enums.ErrorCode;
+import com.hlq.account.enums.ResultCode;
 import org.springframework.util.ObjectUtils;
 
 import java.util.HashMap;
@@ -15,27 +15,27 @@ import java.util.Map;
 
 public class BaseException extends RuntimeException {
 
-    private final ErrorCode errorCode;
+    private final ResultCode resultCode;
     private final transient HashMap<String, Object> data = new HashMap<>();
 
-    public BaseException(ErrorCode errorCode, Map<String, Object> data) {
-        super(errorCode.getMessage());
-        this.errorCode = errorCode;
+    public BaseException(ResultCode resultCode, Map<String, Object> data) {
+        super(resultCode.getMessage());
+        this.resultCode = resultCode;
         if (!ObjectUtils.isEmpty(data)) {
             this.data.putAll(data);
         }
     }
 
-    public BaseException(ErrorCode errorCode, Map<String, Object> data, Throwable cause) {
-        super(errorCode.getMessage(), cause);
-        this.errorCode = errorCode;
+    public BaseException(ResultCode resultCode, Map<String, Object> data, Throwable cause) {
+        super(resultCode.getMessage(), cause);
+        this.resultCode = resultCode;
         if (!ObjectUtils.isEmpty(data)) {
             this.data.putAll(data);
         }
     }
 
-    public ErrorCode getErrorCode() {
-        return errorCode;
+    public ResultCode getErrorCode() {
+        return resultCode;
     }
 
     public Map<String, Object> getData() {

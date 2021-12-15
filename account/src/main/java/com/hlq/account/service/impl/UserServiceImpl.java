@@ -1,22 +1,22 @@
 package com.hlq.account.service.impl;
 
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.hlq.account.entity.User;
-import com.hlq.account.enums.ErrorCode;
+import com.hlq.account.enums.ResultCode;
 import com.hlq.account.enums.Role;
 import com.hlq.account.exception.BaseException;
+import com.hlq.account.exception.user.UserNameAlreadyException;
+import com.hlq.account.exception.user.UserNameNotFoundException;
 import com.hlq.account.mapper.UserMapper;
 import com.hlq.account.service.UserService;
 import com.hlq.account.vo.UserVo;
-import javafx.beans.property.adapter.JavaBeanBooleanProperty;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 
-import java.util.*;
+import java.util.Date;
 
 /**
  * @program: UserServiceImpl
@@ -31,34 +31,43 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
-    @Override
-    public void save(UserVo userVo) {
-        try {
-//            validUserName(userVo.getUserName());
-            throw new Exception("异常");
-        } catch (Exception e) {
-            log.error(e.toString());
-        }
-        // 1.
-        // 创建新的用户
-//        Date date = new Date();
-//        userVo.setRole(Role.ADMIN.getValue());
-//        userVo.setRegisterTime(date);
-//        userVo.setLastLoginTime(date);
-//
-//
-//        userMapper.insertUser();
-
-    }
+    /**
+     * 错误信息提示
+     */
+    private static final String INFO = "info";
 
     /**
-     * 验证用户名合法性
-     * @param username username
+     * 用户名
      */
-    private void validUserName(String username) {
-        User user = userMapper.findUserByUsername(username);
+    private static final String USERNAME = "username";
+
+    @Override
+    public void save(UserVo userVo) {
+        User user = userMapper.findUserByUsername(userVo.getUserName());
         if (!ObjectUtils.isEmpty(user)) {
-            throw new BaseException(ErrorCode.USER_NAME_ALREADY_EXIST, ImmutableMap.of("userName", username));
+            throw new UserNameAlreadyException(ImmutableMap.of(USERNAME, userVo.getUserName()));
+        }
+        Date date = new Date();
+        try {
+            user = new User();
+            // 创建新的用户
+            userVo.setRole(Role.USER.getValue());
+            userVo.setRegisterTime(date);
+            userVo.setLastLoginTime(date);
+            BeanUtils.copyProperties(userVo, user);
+            userMapper.insertUser(user);
+        } catch (Exception e) {
+            throw new BaseException(ResultCode.INTERNET_SERVER_ERROR, ImmutableMap.of(INFO, e.toString()));
         }
     }
+
+    @Override
+    public void find(UserVo userVo) {
+        User user = userMapper.findUserByUsername(userVo.getUserName());
+        if (ObjectUtils.isEmpty(user)) {
+            throw new UserNameNotFoundException(ImmutableMap.of(USERNAME, userVo.getUserName()));
+        }
+        BeanUtils.copyProperties(user, userVo);
+    }
+
 }

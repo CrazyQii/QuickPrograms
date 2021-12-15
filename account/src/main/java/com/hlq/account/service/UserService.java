@@ -14,4 +14,10 @@ public interface UserService {
      * @param userVo 用户Vo
      */
     void save(UserVo userVo);
+
+    /**
+     * 通过用户名查找
+     * @param userVo 用户名
+     */
+    void find(UserVo userVo);
 }

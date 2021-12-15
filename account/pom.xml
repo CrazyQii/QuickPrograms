@@ -61,6 +61,8 @@
             <version>${jwt.version}</version>
             <scope>runtime</scope>
         </dependency>
+
+        <!--   DTO  -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-jackson</artifactId>

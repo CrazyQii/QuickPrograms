@@ -27,7 +27,10 @@ class UserMapperTest {
     @Test
     void updateUser() {
         Date date = new Date();
-        User user = userMapper.findUserById(1L);
+//        User user = userMapper.findUserById(2L);
+        User user = new User();
+        user.setId(1L);
+        user.setUserName("hlq");
         user.setRole(Role.ADMIN.getValue());
         user.setLastLoginTime(date);
         userMapper.updateUser(user);

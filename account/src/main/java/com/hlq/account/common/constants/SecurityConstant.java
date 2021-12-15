@@ -13,7 +13,8 @@ public class SecurityConstant {
      * 系统白名单
      */
     public static final String[] SECURITY_WHITELIST = {
-            "/user/sign-up"
+            "/user/sign-up",
+            "/user/login"
     };
 
     public SecurityConstant() {}

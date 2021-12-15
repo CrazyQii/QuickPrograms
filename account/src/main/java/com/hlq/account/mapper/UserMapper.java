@@ -70,16 +70,28 @@ public interface UserMapper {
      * 插入用户
      * @param user 用户对象
      */
-    @Insert("INSERT INTO tb_user(user_name, nick_name, pass_word, open_id, session_key, avatar, register_time, last_login_time, role) " +
-            "VALUE(#{userName}, #{nickName}, #{passWord}, #{openId}, #{sessionKey}, #{avatar}, #{registerTime}, #{lastLoginTime}, #{role})")
+    @Insert("INSERT INTO tb_user" +
+            "(user_name, nick_name, pass_word, open_id, session_key, avatar, register_time, last_login_time, role) " +
+            "VALUE" +
+            "(#{userName}, #{nickName}, #{passWord}, #{openId}, #{sessionKey}, #{avatar}, #{registerTime}, #{lastLoginTime}, #{role})")
     void insertUser(User user);
 
     /**
      * 更新用户
      * @param user 用户对象
      */
-    @Update("UPDATE tb_user SET user_name=#{userName}, nick_name=#{nickName}, open_id=#{openId}, session_key=#{sessionKey}, " +
-            "avatar=#{avatar}, last_login_time=#{lastLoginTime}, role=#{role} WHERE id=#{id}")
+    @Update("<script>" +
+            "UPDATE tb_user SET " +
+            "<if test='userName != null'>user_name=#{userName}, </if>" +
+            "<if test='nickName != null'>nick_name=#{nickName}, </if>" +
+            "<if test='passWord != null'>pass_word=#{passWord}, </if>" +
+            "<if test='openId != null'>open_id=#{openId}, </if>" +
+            "<if test='sessionKey != null'>session_key=#{sessionKey}, </if>" +
+            "<if test='avatar != null'>avatar=#{avatar}, </if>" +
+            "<if test='lastLoginTime != null'>last_login_time=#{lastLoginTime}, </if>" +
+            "role=#{role}" +
+            "WHERE id=#{id}" +
+            "</script>")
     void updateUser(User user);
 
 
@@ -87,7 +99,10 @@ public interface UserMapper {
      * 插入用户token
      * @param userToken userToken对象
      */
-    @Insert("INSERT INTO tb_user_token(user_id, token) VALUE(#{userId}, #{token})")
+    @Insert("INSERT INTO tb_user_token" +
+            "(user_id, token) " +
+            "VALUE" +
+            "(#{userId}, #{token})")
     void insertUserToken(UserToken userToken);
 
     /**

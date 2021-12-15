@@ -22,6 +22,4 @@ public class UserVo {
     private Date registerTime;
     private Date lastLoginTime;
     private String role;
-    private String userId;
-    private String token;
 }
