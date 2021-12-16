@@ -1,5 +1,6 @@
 package com.hlq.account.controller;
 
+import com.google.common.collect.ImmutableMap;
 import com.hlq.account.common.utils.Response;
 import com.hlq.account.dto.LoginDto;
 import com.hlq.account.dto.SignUpDto;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @program: UserController
@@ -37,10 +41,10 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Response<User>> login(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<Response<ImmutableMap<String, String>>> login(@RequestBody LoginDto loginDto) {
         log.info("用户登录 {}", loginDto);
-        User user = userService.find(loginDto.getUsername());
-        log.info("查询成功：{}", user);
-        return ResponseEntity.ok().body(new Response<>(user));
+        String token = userService.createToken(loginDto);
+        log.info("登录成功, token {}", token);
+        return ResponseEntity.ok().body(new Response<>(ImmutableMap.of("token", token)));
     }
 }

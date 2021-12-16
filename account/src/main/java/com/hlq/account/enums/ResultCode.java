@@ -16,7 +16,8 @@ public enum ResultCode {
     METHOD_ARGUMENT_NOT_VALID(1004, HttpStatus.BAD_REQUEST, "方法参数验证失败"),
     ROLE_NOT_FOUND(1005, HttpStatus.NOT_FOUND, "未找到角色权限"),
     USER_NAME_ALREADY_EXIST(2001, HttpStatus.BAD_REQUEST, "用户名已经存在"),
-    USER_NAME_NOT_FOUND(2002, HttpStatus.NOT_FOUND, "未找到指定用户");
+    USER_NAME_NOT_FOUND(2002, HttpStatus.NOT_FOUND, "未找到指定用户"),
+    PASSWORD_VERIFY_FAILED(2003, HttpStatus.BAD_REQUEST, "密码错误");
 
     private final int code;
     private final HttpStatus status;

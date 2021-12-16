@@ -1,12 +1,15 @@
 package com.hlq.account.common.utils;
 
+import com.google.common.collect.ImmutableMap;
 import com.hlq.account.common.constants.SecurityConstant;
 import com.hlq.account.enums.ResultCode;
 import com.hlq.account.exception.BaseException;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.ObjectUtils;
 
 import javax.crypto.SecretKey;
 import javax.xml.bind.DatatypeConverter;
@@ -38,7 +41,6 @@ public class JwtTokenUtil {
      */
     public static String createToken(String username, String id, List<String> roles, boolean isRememberMe) {
         try {
-            log.info("生成token, 用户信息 {}", username);
             long expiration = isRememberMe ? SecurityConstant.EXPIRATION_REMEMBER : SecurityConstant.EXPIRATION;
             final Date createdDate = new Date();
             final Date expirationDate = new Date(createdDate.getTime() + expiration * 1000);
@@ -61,16 +63,27 @@ public class JwtTokenUtil {
             // 添加 token 前缀 "Bearer "
             return SecurityConstant.TOKEN_PREFIX + tokenPrefix;
         } catch (Exception e) {
-            log.error("JWT生成token失败，ERROR | {}", e.toString());
+            log.error("JWT生成token失败，ERROR | {}", e.getMessage());
             throw new BaseException(ResultCode.GENERATE_JWT_FAILED, null);
         }
     }
 
-//    /**
-//     * 生成token版本2
-//     * @return
-//     */
-//    public static String createToken(String username, String secret) {
-//
-//    }
+    /**
+     * 解析token
+     * @param token
+     * @return
+     */
+    public static Claims verifyToken(String token) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(SECRET_KEY).build()
+                    .parseClaimsJws(token).getBody();
+            System.out.println(claims.getId());
+            System.out.println(claims.getSubject());
+            return claims;
+        } catch (Exception e) {
+            log.error("JWT解析token失败，ERROR | {}", e.getMessage());
+            throw new BaseException(ResultCode.VERIFY_JWT_FAILED, ImmutableMap.of("token", token));
+        }
+    }
 }

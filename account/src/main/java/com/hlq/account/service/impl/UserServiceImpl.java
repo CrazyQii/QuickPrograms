@@ -1,8 +1,10 @@
 package com.hlq.account.service.impl;
 
 import com.google.common.collect.ImmutableMap;
+import com.hlq.account.common.utils.JwtTokenUtil;
 import com.hlq.account.dto.LoginDto;
 import com.hlq.account.dto.SignUpDto;
+import com.hlq.account.entity.user.JwtUser;
 import com.hlq.account.entity.user.Role;
 import com.hlq.account.entity.user.User;
 import com.hlq.account.entity.user.UserRole;
@@ -16,11 +18,16 @@ import com.hlq.account.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @program: UserServiceImpl
@@ -39,6 +46,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRoleRepository userRoleRepository;
 
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private static final String USERNAME = "username";
@@ -58,7 +66,8 @@ public class UserServiceImpl implements UserService {
             }
             BeanUtils.copyProperties(signUpDto, user);
             // 创建新的用户
-//            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            // 密码加密
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             user.setRegisterTime(date);
             user.setLastLoginTime(date);
             userRepository.save(user);
@@ -79,9 +88,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User find(String username) {
         try {
-            User user = userRepository.findUserByUsername(username).orElseThrow(() ->
+            return userRepository.findUserByUsername(username).orElseThrow(() ->
                     new BaseException(ResultCode.USER_NAME_NOT_FOUND, ImmutableMap.of(USERNAME, username)));
-            return user;
         } catch (BaseException e) {
             log.error("查询用户异常，username:{} ERROR | {}", username , e.getMessage());
             throw new BaseException(e.getErrorCode(), e.getData());
@@ -90,26 +98,39 @@ public class UserServiceImpl implements UserService {
             throw new BaseException(ResultCode.INTERNET_SERVER_ERROR, ImmutableMap.of(INFO, e.getMessage()));
         }
     }
-//
+
     @Override
     public String createToken(LoginDto loginDto) {
-//        User user = userRepository.findUserByUsername(loginDto.getUserName());
-//        if (ObjectUtils.isEmpty(user)) {
-//            throw new BaseException(ResultCode.USER_NAME_NOT_FOUND, ImmutableMap.of(USERNAME, loginDto.getUserName()));
-//        }
-////        if (!this.check(loginDto.getPassWord(), user.getPassWord())) {
-////            throw new BadCredentialsException("密码不正确");
-////        }
-        return null;
+        try {
+            User user = userRepository.findUserByUsername(loginDto.getUsername()).orElseThrow(() ->
+                    new BaseException(ResultCode.USER_NAME_NOT_FOUND, ImmutableMap.of(USERNAME, loginDto.getUsername())));
+            if (!this.check(loginDto.getPassword(), user.getPassword())) {
+                throw new BaseException(ResultCode.PASSWORD_VERIFY_FAILED, null);
+            }
+
+            JwtUser jwtUser = new JwtUser(user);
+            List<String> authorities = jwtUser.getAuthorities()
+                    .stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.toList());
+
+            return JwtTokenUtil.createToken(user.getUsername(), user.getId().toString(), authorities, loginDto.isRememberMe());
+        } catch (BaseException e) {
+            log.error("创建token异常，username:{} ERROR | {}", loginDto.getUsername() , e.getMessage());
+            throw new BaseException(e.getErrorCode(), e.getData());
+        } catch (Exception e) {
+            log.error("创建token异常，username:{} ERROR | {}", loginDto.getUsername(), e.getMessage());
+            throw new BaseException(ResultCode.INTERNET_SERVER_ERROR, ImmutableMap.of(INFO, e.getMessage()));
+        }
     }
-//
-//    /**
-//     * 校验密码
-//     * @param currentPassWord 当前密码
-//     * @param password 数据库密码
-//     * @return 正误结果
-//     */
-//    public boolean check(String currentPassWord, String password) {
-//        return this.bCryptPasswordEncoder.matches(currentPassWord, password);
-//    }
+
+    /**
+     * 校验密码
+     * @param currentPassWord 当前密码
+     * @param password 数据库密码
+     * @return 正误结果
+     */
+    public boolean check(String currentPassWord, String password) {
+        return bCryptPasswordEncoder.matches(currentPassWord, password);
+    }
 }

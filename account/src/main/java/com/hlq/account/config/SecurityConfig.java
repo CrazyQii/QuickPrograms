@@ -1,12 +1,15 @@
 package com.hlq.account.config;
 
 import com.hlq.account.common.constants.SecurityConstant;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * @program: SecurityConfig
@@ -14,6 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
  * @author: hanLinQi
  * @create: 2021-12-14 19:38
  **/
+@Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -30,5 +34,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 // 不创建Session
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
+    }
+
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
