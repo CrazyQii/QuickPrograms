@@ -1,7 +1,8 @@
 package com.hlq.account.service;
 
 import com.hlq.account.dto.LoginDto;
-import com.hlq.account.vo.UserVo;
+import com.hlq.account.dto.SignUpDto;
+import com.hlq.account.entity.user.User;
 
 /**
  * @program: UserService
@@ -12,15 +13,16 @@ public interface UserService {
 
     /**
      * 添加用户数据
-     * @param userVo 用户Vo
+     * @param signUpDto 登录用户
      */
-    void save(UserVo userVo);
+    void save(SignUpDto signUpDto);
 
     /**
      * 通过用户名查找
-     * @param userVo 用户名
+     * @param username 用户名
+     * @return
      */
-    void find(UserVo userVo);
+    User find(String username);
 
     /**
      * 生成token

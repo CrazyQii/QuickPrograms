@@ -4,6 +4,17 @@ spring:
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
-
-mybatis:
-  type-aliases-package: com.hlq.account.entity
+    hikari:
+      connection-timeout: 60000
+      validation-timeout: 3000
+      idle-timeout: 60000
+      login-timeout: 5
+      max-lifetime: 60000
+      maximum-pool-size: 10
+      minimum-idle: 10
+      read-only: false
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    database: mysql

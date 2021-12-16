@@ -1,9 +1,12 @@
 package com.hlq.account.common.utils;
 
 import com.hlq.account.common.constants.SecurityConstant;
+import com.hlq.account.enums.ResultCode;
+import com.hlq.account.exception.BaseException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.crypto.SecretKey;
 import javax.xml.bind.DatatypeConverter;
@@ -16,6 +19,7 @@ import java.util.List;
  * @Author: HanLinqi
  * @Date: 2021/12/15 23:39:42
  */
+@Slf4j
 public class JwtTokenUtil {
 
     /**
@@ -24,21 +28,49 @@ public class JwtTokenUtil {
     private static final byte[] API_KEY_SECRET_BYTES = DatatypeConverter.parseBase64Binary(SecurityConstant.JWT_SECRET_KEY);
     private static final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(API_KEY_SECRET_BYTES);
 
+    /**
+     * 生成token版本1
+     * @param username
+     * @param id
+     * @param roles
+     * @param isRememberMe
+     * @return
+     */
     public static String createToken(String username, String id, List<String> roles, boolean isRememberMe) {
-        long expiration = isRememberMe ? SecurityConstant.EXPIRATION_REMEMBER : SecurityConstant.EXPIRATION;
-        final Date createdDate = new Date();
-        final Date expirationDate = new Date(createdDate.getTime() + expiration * 1000);
-        String tokenPrefix = Jwts.builder()
-                .setHeaderParam("type", SecurityConstant.TOKEN_TYPE)
-                .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
-                .claim(SecurityConstant.ROLE_CLAIMS, roles)
-                .setId(id)
-                .setIssuer("Hanlinqi")
-                .setIssuedAt(createdDate)
-                .setSubject(username)
-                .setExpiration(expirationDate)
-                .compact();
-        // 添加 token 前缀 "Bearer "
-        return SecurityConstant.TOKEN_PREFIX + tokenPrefix;
+        try {
+            log.info("生成token, 用户信息 {}", username);
+            long expiration = isRememberMe ? SecurityConstant.EXPIRATION_REMEMBER : SecurityConstant.EXPIRATION;
+            final Date createdDate = new Date();
+            final Date expirationDate = new Date(createdDate.getTime() + expiration * 1000);
+            String tokenPrefix = Jwts.builder()
+                    .setHeaderParam("type", SecurityConstant.TOKEN_TYPE)
+                    .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
+                    // 不重要的信息放在Claim
+                    .claim(SecurityConstant.ROLE_CLAIMS, roles)
+                    .setId(id)
+                    // JWT签发主体
+                    .setIssuer("Hanlinqi")
+                    // 签发时间
+                    .setIssuedAt(createdDate)
+                    // 主体所有人
+                    .setSubject(username)
+                    // 过期时间
+                    .setExpiration(expirationDate)
+                    // 生成JWT
+                    .compact();
+            // 添加 token 前缀 "Bearer "
+            return SecurityConstant.TOKEN_PREFIX + tokenPrefix;
+        } catch (Exception e) {
+            log.error("JWT生成token失败，ERROR | {}", e.toString());
+            throw new BaseException(ResultCode.GENERATE_JWT_FAILED, null);
+        }
     }
+
+//    /**
+//     * 生成token版本2
+//     * @return
+//     */
+//    public static String createToken(String username, String secret) {
+//
+//    }
 }

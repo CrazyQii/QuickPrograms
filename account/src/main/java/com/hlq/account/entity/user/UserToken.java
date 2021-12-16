@@ -1,6 +1,8 @@
-package com.hlq.account.entity;
+package com.hlq.account.entity.user;
 
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * @program: UserToken
@@ -9,7 +11,7 @@ import lombok.Data;
  * @create: 2021-12-13 14:54
  **/
 @Data
-public class UserToken {
+public class UserToken implements Serializable {
     private String userId;
     private String token;
     private User user;

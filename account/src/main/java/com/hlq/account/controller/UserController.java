@@ -3,10 +3,9 @@ package com.hlq.account.controller;
 import com.hlq.account.common.utils.Response;
 import com.hlq.account.dto.LoginDto;
 import com.hlq.account.dto.SignUpDto;
+import com.hlq.account.entity.user.User;
 import com.hlq.account.service.UserService;
-import com.hlq.account.vo.UserVo;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,18 +31,16 @@ public class UserController {
     @PostMapping("/sign-up")
     public ResponseEntity<Response<Void>> signUp(@RequestBody SignUpDto signUpDto) {
         log.info("用户注册信息 {}", signUpDto);
-        UserVo userVo = new UserVo();
-        BeanUtils.copyProperties(signUpDto, userVo);
-        userService.save(userVo);
+        userService.save(signUpDto);
+        log.info("注册成功：{}", signUpDto);
         return ResponseEntity.ok().body(new Response<>());
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Response<UserVo>> login(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<Response<User>> login(@RequestBody LoginDto loginDto) {
         log.info("用户登录 {}", loginDto);
-        UserVo userVo = new UserVo();
-        BeanUtils.copyProperties(loginDto, userVo);
-        userService.find(userVo);
-        return ResponseEntity.ok().body(new Response<>(userVo));
+        User user = userService.find(loginDto.getUsername());
+        log.info("查询成功：{}", user);
+        return ResponseEntity.ok().body(new Response<>(user));
     }
 }

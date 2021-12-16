@@ -13,6 +13,6 @@ import java.util.Date;
 
 @Data
 public class SignUpDto {
-    private String userName;
-    private String passWord;
+    private String username;
+    private String password;
 }

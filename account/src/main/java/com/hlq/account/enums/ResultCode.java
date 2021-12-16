@@ -10,11 +10,13 @@ import org.springframework.http.HttpStatus;
 public enum ResultCode {
     //
     SUCCESS(1000, HttpStatus.OK, "成功"),
-    USER_NAME_ALREADY_EXIST(1001, HttpStatus.BAD_REQUEST, "用户名已经存在"),
-    USER_NAME_NOT_FOUND(1002, HttpStatus.NOT_FOUND, "未找到指定用户"),
+    INTERNET_SERVER_ERROR(1001, HttpStatus.INTERNAL_SERVER_ERROR, "服务器端异常"),
+    GENERATE_JWT_FAILED(1002, HttpStatus.UNAUTHORIZED, "token生成失败"),
     VERIFY_JWT_FAILED(1003, HttpStatus.UNAUTHORIZED, "token验证失败"),
-    METHOD_ARGUMENT_NOT_VALID(1003, HttpStatus.BAD_REQUEST, "方法参数验证失败"),
-    INTERNET_SERVER_ERROR(1004, HttpStatus.INTERNAL_SERVER_ERROR, "服务器端异常");
+    METHOD_ARGUMENT_NOT_VALID(1004, HttpStatus.BAD_REQUEST, "方法参数验证失败"),
+    ROLE_NOT_FOUND(1005, HttpStatus.NOT_FOUND, "未找到角色权限"),
+    USER_NAME_ALREADY_EXIST(2001, HttpStatus.BAD_REQUEST, "用户名已经存在"),
+    USER_NAME_NOT_FOUND(2002, HttpStatus.NOT_FOUND, "未找到指定用户");
 
     private final int code;
     private final HttpStatus status;

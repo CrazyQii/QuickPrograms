@@ -1,4 +1,4 @@
-package com.hlq.account.entity;
+package com.hlq.account.entity.user;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,7 +16,6 @@ public class JwtUser implements UserDetails {
     private Long id;
     private String username;
     private String password;
-    private Boolean enabled;
     private Collection<? extends GrantedAuthority> authorities;
 
     public JwtUser() {
@@ -27,10 +26,9 @@ public class JwtUser implements UserDetails {
      */
     public JwtUser(User user) {
         id = user.getId();
-        username = user.getUserName();
-        password = user.getPassWord();
-//        enabled = user.getEnabled() == null ? true : user.getEnabled();
-        authorities = user.getRole();
+        username = user.getUsername();
+        password = user.getPassword();
+        authorities = user.getUserRoles();
     }
 
     @Override
@@ -74,7 +72,6 @@ public class JwtUser implements UserDetails {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", enabled=" + enabled +
                 ", authorities=" + authorities +
                 '}';
     }
