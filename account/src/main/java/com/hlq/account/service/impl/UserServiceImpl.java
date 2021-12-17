@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.hlq.account.common.utils.JwtTokenUtil;
 import com.hlq.account.dto.LoginDto;
 import com.hlq.account.dto.SignUpDto;
+import com.hlq.account.dto.UserUpdateDto;
 import com.hlq.account.entity.user.JwtUser;
 import com.hlq.account.entity.user.Role;
 import com.hlq.account.entity.user.User;
@@ -18,7 +19,6 @@ import com.hlq.account.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,6 +27,7 @@ import org.springframework.util.ObjectUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -120,6 +121,27 @@ public class UserServiceImpl implements UserService {
             throw new BaseException(e.getErrorCode(), e.getData());
         } catch (Exception e) {
             log.error("创建token异常，username:{} ERROR | {}", loginDto.getUsername(), e.getMessage());
+            throw new BaseException(ResultCode.INTERNET_SERVER_ERROR, ImmutableMap.of(INFO, e.getMessage()));
+        }
+    }
+
+    @Override
+    public void update(UserUpdateDto userUpdateDto) {
+        try {
+            User user = userRepository.findUserByUsername(userUpdateDto.getUsername()).orElseThrow(() ->
+                    new BaseException(ResultCode.USER_NAME_NOT_FOUND, ImmutableMap.of(USERNAME, userUpdateDto.getUsername())));
+            if (Objects.nonNull(userUpdateDto.getNickName())) {
+                user.setNickName(userUpdateDto.getNickName());
+            }
+            if (Objects.nonNull(userUpdateDto.getPassword())) {
+                user.setPassword(bCryptPasswordEncoder.encode(userUpdateDto.getPassword()));
+            }
+            userRepository.save(user);
+        } catch (BaseException e) {
+            log.error("更新用户数据失败，{} ERROR | {}", userUpdateDto , e.getMessage());
+            throw new BaseException(e.getErrorCode(), e.getData());
+        } catch (Exception e) {
+            log.error("更新用户数据失败，{} ERROR | {}", userUpdateDto, e.getMessage());
             throw new BaseException(ResultCode.INTERNET_SERVER_ERROR, ImmutableMap.of(INFO, e.getMessage()));
         }
     }

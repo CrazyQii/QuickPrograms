@@ -1,18 +1,20 @@
 package com.hlq.account.controller;
 
 import com.google.common.collect.ImmutableMap;
+import com.hlq.account.common.constants.SecurityConstant;
 import com.hlq.account.common.utils.Response;
 import com.hlq.account.dto.LoginDto;
 import com.hlq.account.dto.SignUpDto;
+import com.hlq.account.dto.UserUpdateDto;
 import com.hlq.account.entity.user.User;
 import com.hlq.account.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,10 +43,17 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Response<ImmutableMap<String, String>>> login(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<Response<Void>> login(@RequestBody LoginDto loginDto) {
         log.info("用户登录 {}", loginDto);
         String token = userService.createToken(loginDto);
         log.info("登录成功, token {}", token);
-        return ResponseEntity.ok().body(new Response<>(ImmutableMap.of("token", token)));
+        return ResponseEntity.ok().header(SecurityConstant.TOKEN_HEADER, token).body(new Response<>());
+    }
+
+    @PutMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    public ResponseEntity<Void> update(@RequestBody UserUpdateDto userUpdateDto) {
+        userService.update(userUpdateDto);
+        return ResponseEntity.ok().build();
     }
 }

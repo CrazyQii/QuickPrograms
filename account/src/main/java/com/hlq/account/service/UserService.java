@@ -2,6 +2,7 @@ package com.hlq.account.service;
 
 import com.hlq.account.dto.LoginDto;
 import com.hlq.account.dto.SignUpDto;
+import com.hlq.account.dto.UserUpdateDto;
 import com.hlq.account.entity.user.User;
 
 /**
@@ -30,4 +31,10 @@ public interface UserService {
      * @return token
      */
     String createToken(LoginDto loginDto);
+
+    /**
+     * 更新用户
+     * @param userUpdateDto
+     */
+    void update(UserUpdateDto userUpdateDto);
 }
