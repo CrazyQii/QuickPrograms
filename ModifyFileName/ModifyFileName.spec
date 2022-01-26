@@ -5,7 +5,7 @@ block_cipher = None
 
 
 a = Analysis(['ModifyFileName.py'],
-             pathex=['D:\\Workspace\\QuickPrograms\\ModifyFileName'],
+             pathex=[],
              binaries=[],
              datas=[],
              hiddenimports=[],

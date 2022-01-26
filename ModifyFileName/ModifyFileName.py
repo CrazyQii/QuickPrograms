@@ -8,7 +8,7 @@ def RenameBatchImages():
         path = input("输入目录路径(结尾添加/): ")
         fileName = input("图片前缀名称(默认名称'图片'): ")
         fileStartNumber = input("图片起始编号(默认1): ")
-        fileformat = input("图片格式(jpg\png\\tiff\webp): ")
+        fileformat = input("图片格式(仅支持将 jpg\png\\tiff\webp\jfif\gif\jpeg，修改为 jpg\png\\tiff\webp): ")
 
         # 获取该目录下的所有文件
         fileList = os.listdir(path=path)
@@ -31,7 +31,9 @@ def RenameBatchImages():
         
         for fName in fileList:
             # 判断文件格式是否为图片
-            if fName.endswith(".jpg") is not True and fName.endswith(".png") is not True and fName.endswith(".tiff") is not True and fName.endswith(".webp") is not True and fName.endswith(".jfif") is not True:
+            if fName.endswith(".jpg") is not True and fName.endswith(".png") is not True and fName.endswith(".tiff") is not True \
+                    and fName.endswith(".webp") is not True and fName.endswith(".jfif") is not True and fName.endswith(".gif") is not True \
+                    and fName.endswith(".jpeg") is not True:
                 continue
             
             # 设置旧文件名称
