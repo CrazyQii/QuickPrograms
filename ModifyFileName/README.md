@@ -1,5 +1,9 @@
 ### 批量修改文件名称 ModifyFileName
 
+导出exe文件
+1. pip install pyinstaller
+2. pyinstaller -F xxx.py
+
 启动方式：
 
 1. 可在 `/ModifyFileName/dist/` 文件夹下直接运行可执行文件
@@ -9,3 +13,4 @@
 
 - 实现功能：
   1. 批量修改指定文件夹下的图片名称
+  2. 批量pdf文件转照片
