@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <title>首页</title>
+</head>
+<body>
+
+<div class="container" style="padding-top: 5rem;">
+
+    <div th:if="${result.code} != '1001'" th:text="'错误提示：' + ${result.message}" class="alert alert-danger" role="alert"></div>
+
+    <blockquote class="blockquote text-center">
+        <p class="mb-0 display-4">文件内容校验平台</p>
+    </blockquote>
+
+    <ul class="nav nav-pills" style="margin-bottom: 4rem;">
+        <li class="nav-item">
+            <a class="nav-link btn active" id="multi-files-verify">批量文件比对校验</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link btn" id="file-verify">文件比对校验</a>
+        </li>
+    </ul>
+
+    <!--  批量文件校验表单  -->
+    <form method="post" enctype="multipart/form-data" action="/upload-multi-files"  id="multi-files">
+        <div  class="form-group">
+            <label for="path">文件路径：</label>
+            <input id="path" type="text" name="path" class="form-control" placeholder="请输入本地文件路径">
+        </div>
+
+        <p style="margin-top: 2rem;"><input type="submit" value="上传" class="btn btn-primary btn-lg btn-block"/></p>
+    </form>
+
+    <!--  指定文件比较  -->
+    <form method="post" enctype="multipart/form-data" action="/upload-file" id="file" style="display: none">
+        <div class="form-group">
+            <label for="file1">选择文件1：</label>
+            <input id="file1" type="file" name="file1" class="form-control-file"/>
+        </div>
+        <div class="form-group">
+            <label for="file2">选择文件2：</label>
+            <input id="file2" type="file" name="file2" class="form-control-file"/>
+        </div>
+        <p style="margin-top: 2rem;"><input type="submit" value="上传" class="btn btn-primary btn-lg btn-block"/></p>
+    </form>
+
+
+</div>
+
+</body>
+</html>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script>
+$(document).ready(function(){
+    // 点击批量文件比对按钮
+    $("#multi-files-verify").click(function () {
+        // 展示批量文件对比表单，隐藏指定文件对比表单
+        $("#multi-files").show()
+        $("#file").hide()
+        $("#multi-files-verify").addClass("active")
+        $("#file-verify").removeClass("active")
+    })
+
+    // 点击指定文件比对
+    $("#file-verify").click(function () {
+        $("#multi-files").hide()
+        $("#file").show()
+        $("#file-verify").addClass("active")
+        $("#multi-files-verify").removeClass("active")
+    })
+
+
+});
+
+</script>

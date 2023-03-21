@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+<head>
+    <meta charset="UTF-8">
+    <title>结果统计</title>
+</head>
+<body>
+
+    <div class="container" style="padding-top: 5rem;">
+        <blockquote class="blockquote text-center">
+            <p class="mb-0 display-4">文件内容校验平台</p>
+        </blockquote>
+
+        <div class="jumbotron" >
+            <h1 class="display-4" th:text="'最高文本相似度: ' + ${result.percent} + '%'"></h1>
+            <p class="lead" th:text="'【 ' + ${result.name1} + ' 】 和 【 ' + ${result.name2} + ' 】 的比对结果'"></p>
+            <p class="lead" th:text="'管理策略建议: ' + ${result.message}"></p>
+            <hr class="my-4">
+            <!--     如果后端返回的是100文本相同，则显示下方的删除文件表单       -->
+            <div th:if="${result.percent} == '100'">
+                <p class="lead">可以选择删除其中的一个文件</p>
+                <div style="margin: 1rem">
+                    <form method="post" enctype="multipart/form-data" action="/delete">
+                        <span th:text="${result.name1}"></span>
+                        <input type="text" hidden th:value="${result.name1}" name="file" />
+                        <button type="submit" class="btn btn-danger btn-sm" style="float: right">删除</button>
+                    </form>
+                </div>
+                <div style="margin: 1rem">
+                    <form method="post" enctype="multipart/form-data" action="/delete">
+                        <span th:text="${result.name2}"></span>
+                        <input type="text" hidden th:value="${result.name2}" name="file" />
+                        <button type="button" class="btn btn-danger btn-sm" style="float: right">删除</button>
+                    </form>
+                </div>
+            </div>
+            <a href="/"><button type="button" class="btn btn-primary">重新上传</button></a>
+        </div>
+    </div>
+</body>
+</html>
